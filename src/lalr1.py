@@ -171,7 +171,7 @@ class Syntax:
     link: dict[str, set] = {}
     worklist: list[str] = []
     for sym in self.symbol_list - self.nonterm_list:
-      result[sym] = set(sym)
+      result[sym] = set([sym])
     for rule in self.rules: #nullableを使ってfirst集合の繋がりのリストを作る。
       for sym in rule.re:
         if sym not in link:
