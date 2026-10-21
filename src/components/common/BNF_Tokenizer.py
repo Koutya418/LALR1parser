@@ -4,7 +4,7 @@ from components.common.Data import InputToken
 import json, os
 
 cwd = os.getcwd()
-bnf_json_path = "/src/components/common/json/regix_nfa.json"
+bnf_json_path = "/src/components/common/json/regex_nfa.json"
 
 @dataclass
 class NFA_state:
@@ -17,13 +17,13 @@ class NFA_ret:
   end: int
 
 @dataclass
-class Regix_ret:
+class Regex_ret:
   accepts: list
   count: int
   return_value: int
 
 @dataclass
-class Regix_state:
+class Regex_state:
   state: int
 
 class Bnf_nfa:
@@ -132,7 +132,7 @@ class Bnf_nfa:
       states = next_states
     if max(result) >= len(input) and self.end_id in states:
       return_value = 0
-    return Regix_ret(input[:max(result)], max(result), return_value)
+    return Regex_ret(input[:max(result)], max(result), return_value)
 
 def bnf_tokenizer(bnf_path:str):
   nfa = Bnf_nfa(bnf_json_path)
