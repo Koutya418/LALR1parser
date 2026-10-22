@@ -9,7 +9,7 @@ from components.common.States import States
 
 cwd = os.getcwd()
 
-def Tokenizer(tokenizer_path:str, file_path:str, bnf_path:str):
+def Tokenizer(tokenizer_path:str, bnf_path:str, file_path:str):
   result_pattern:list[str] = []
   with open(cwd + tokenizer_path, encoding='utf-8', mode='r') as f:
     input_str = f.read()
@@ -80,13 +80,17 @@ def Tokenizer(tokenizer_path:str, file_path:str, bnf_path:str):
       result_tokens.append(InputToken(token_type, token))
   return result_tokens
 
-input = Tokenizer('/src/tokenizer.txt', '/src/test.txt', '/src/bnf.txt')
-syntax = Syntax('/src/bnf.txt')
-states = States()
-states.LR0_table_gen(syntax)
-states.lalr1_gen(syntax)
-lalr1 = LALR1(syntax, states)
-input.append(EOF)
-result = lalr1.parse(input)
-result = lalr1.tree_gen(result, input[:-1])
-result.show()
+def parse(tokenizer_path:str, bnf_path:str, file_path:str):
+  input = Tokenizer(tokenizer_path, bnf_path, file_path)
+  syntax = Syntax(bnf_path)
+  states = States()
+  states.LR0_table_gen(syntax)
+  states.lalr1_gen(syntax)
+  lalr1 = LALR1(syntax, states)
+  input.append(EOF)
+  result = lalr1.parse(input)
+  result = lalr1.tree_gen(result, input[:-1])
+  result.show()
+  return result
+
+parse("/src/tokenizer.txt", "/src/bnf.txt", "/src/test.txt")
