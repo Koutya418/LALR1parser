@@ -55,6 +55,8 @@ class Syntax:
             append_re = bnf_token
             if bnf_token[-1] == bnf_token[0] == '"':
               append_re = bnf_token[1:-1]
+            if append_re == "<eps>":
+              continue
             result_symbols.add(append_re)
             re.append(append_re)
       old_bnf_token = bnf_token

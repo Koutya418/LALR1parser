@@ -1,16 +1,18 @@
 from components.common.Syntax import Syntax
 from components.common.States import States
-from components.common.Data import LR0Item, State, EOF, Token
+from components.common.Data import LR0Item, State, EOF, Token, InputToken
 from collections import deque
 
+import pprint
+
 class LALR1:
-  def __init__(self, syntax:Syntax, states:States):
+  def __init__(self, syntax:Syntax, states:States, debug:bool = False):
     self.syntax = syntax
     self.states = states
     self.table:dict[int, dict[str, dict[str, str]]] = {}
-    self.lalr1_table_gen()
+    self.lalr1_table_gen(debug)
 
-  def lalr1_table_gen(self):
+  def lalr1_table_gen(self, debug):
     end_item = LR0Item(0, len(self.syntax.get_rule(0).re))
     for i in range(len(self.states.states)):
       state:State = self.states.states[i]
@@ -23,6 +25,9 @@ class LALR1:
           continue
         if next_symbol is None:
           for symbol in state.la[item]:
+            if symbol in self.table[i]:
+              if debug:
+                print(f"生成規則の上書きが発生しました")
             self.table[i][symbol] = {"action":"reduce", "value":item.rule_id}
           continue
         action = "shift"
@@ -31,6 +36,9 @@ class LALR1:
           value = self.states.get_id(frozenset(next_state_cores[next_symbol]))
         if value is None:
           print("テーブル生成時に問題が発生しました")
+        if next_symbol in self.table[i]:
+          if debug:
+            print(f"生成規則の上書きが発生しました")
         if self.syntax.is_term(next_symbol):
           self.table[i][next_symbol] = {"action":action, "value": value}
         else:
@@ -42,7 +50,10 @@ class LALR1:
     stack = [0]
     result = []
     while len(input_deque) > 0:
-      action_data = self.table[stack[-1]][input_deque[0]]
+      input_token = input_deque[0]
+      if type(input_token) == InputToken:
+        input_token = input_token.tokentype
+      action_data = self.table[stack[-1]][input_token]
       action = action_data.get("action")
       value = action_data.get("value")
       match action:
@@ -69,7 +80,10 @@ class LALR1:
     reduce_re = reversed(reduce_rule.re)
     root_token = Token(reduce_symbol_type, reduce_rule.le, [])
     for symbol in reduce_re:
-      if symbol == input_deque[-1]:
+      input_token = input_deque[-1]
+      if type(input_token) == InputToken:
+        input_token = input_token.tokentype
+      if symbol == input_token:
         add_item = None
         add_item_symbol_type = self.syntax.get_symbol_type(symbol)
         match add_item_symbol_type:
@@ -77,6 +91,8 @@ class LALR1:
             add_item = Token(add_item_symbol_type, symbol, [input_deque[-1]])
           case "term":
             add_item = symbol
+            if type(input_deque[-1]) == InputToken:
+              add_item = input_deque[-1]
         root_token.next_token.append(add_item)
         input_deque.pop()
       else:

@@ -35,22 +35,10 @@ class Token:
       match token:
         case str():
           print(indent + " " + token)
+        case InputToken():
+          token.show(indent + " ")
         case Token():
           token.show(nest + 1)
-  def show2(self, nest = 0):
-    inc = 0
-    indent = ""
-    for _ in range(nest):
-        indent += " "
-    if len(self.next_token) > 1:
-      print(indent + self.token_sym)
-      inc = 1
-    for token in self.next_token:
-      match token:
-        case str():
-          print(indent + " " + token)
-        case Token():
-          token.show2(nest + inc)
 
 @dataclass(frozen=True)
 class LR0Item:
@@ -160,7 +148,7 @@ class State:
           link_items = set([item])
           if item in links:
             link_items = links[item]
-          links[add_item] |= link_items #親アイテムがリンクにある場合に親アイテムのリンクを追加する実装にすることで、コアアイテムからのリンクを生成
+          links[add_item] |= link_items #親アイテムがリンクにある場合に親アイテムのリンクを追加することで、コアアイテムからのリンクを生成
         add_flag = False
         if add_item not in self.items:
           self.items.append(add_item)
@@ -184,7 +172,8 @@ class State:
       if next_symbol not in next_state_cores:
         next_state_cores[next_symbol] = set()
       next_state_cores[next_symbol].add(next_item)
-      if Propagation_symbol in self.la[item] and len(self.la[item] - set([Propagation_symbol])) > 0: #自然発生した記号の追跡
+      lookahead = self.la[item] - {Propagation_symbol}
+      if lookahead: #自然発生した記号の追跡
         if next_item not in spontaneous:
           spontaneous[next_item] = set()
         spontaneous[next_item] |= self.la[item] - set([Propagation_symbol])
@@ -194,3 +183,6 @@ class InputToken:
   def __init__(self, tokentype, char):
     self.tokentype = tokentype
     self.char = char
+
+  def show(self, f:str):
+    print(f + self.char)

@@ -2,6 +2,8 @@ from __future__ import annotations
 from components.common.Data import State, LR0Item, Propagation_symbol, EOF
 from collections import deque
 
+import pprint
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from components.common.Syntax import Syntax
@@ -49,7 +51,9 @@ class States:
       for next_core in next_core_states.values():
         state_id = self.get_id(next_core)
         for core_item in next_core:
-          propagation_source_items = links[LR0Item(core_item.rule_id, core_item.dot - 1)]
+          propagation_source_items = links.get(LR0Item(core_item.rule_id, core_item.dot - 1))
+          if propagation_source_items is None:
+            continue
           for propagation_source_item in propagation_source_items:
             if propagation_source_item not in propagation_link[i]:
               propagation_link[i][propagation_source_item] = {}
@@ -57,25 +61,24 @@ class States:
               propagation_link[i][propagation_source_item][state_id] = set()
             propagation_link[i][propagation_source_item][state_id].add(core_item)
 
-          for core_item, la in spontaneous.items():
-            if core_item in next_core:
-              if state_id not in spontaneous_la:
-                spontaneous_la[state_id] = {}
-              if core_item not in spontaneous_la[state_id]:
-                spontaneous_la[state_id][core_item] = set()
-              spontaneous_la[state_id][core_item] |= la
+        for spontaneous_item, la in spontaneous.items():
+          if spontaneous_item in next_core:
+            if state_id not in spontaneous_la:
+              spontaneous_la[state_id] = {}
+            if spontaneous_item not in spontaneous_la[state_id]:
+              spontaneous_la[state_id][spontaneous_item] = set()
+            spontaneous_la[state_id][spontaneous_item] |= la
 
     for i in range(len(self.states)):
       self.states[i].la_init()
       state = self.states[i]
       for core_item in state.core:
-        state.la_set(core_item, set())
+        state.la_add(core_item, set())
         if i in spontaneous_la:
           if core_item in spontaneous_la[i]:
             state.la_add(core_item, spontaneous_la[i][core_item])
         if core_item == start_item:
           state.la_add(core_item, set([EOF]))
-
     sources = []
     for source_state_id, source_dict in propagation_link.items():
       for source_item in source_dict.keys():

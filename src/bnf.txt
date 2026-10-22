@@ -1,0 +1,20 @@
+S ::= <root>;
+<root> ::= <codeblock>;
+<codeblock> ::= <code>
+              | <codeblock> <code>;
+
+<code> ::= <if_statement>
+          | <assignment_statement>;
+
+<assignment_statement> ::= <identifier> "=" <literal>;
+
+<comparison_operator> ::= "=="
+                        | "!="
+                        | ">"
+                        | ">="
+                        | "<="
+                        | "<";
+
+<identifier> ::= id;
+
+<literal> ::= int;

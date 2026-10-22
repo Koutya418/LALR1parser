@@ -1,0 +1,5 @@
+id = "(/z|_)/w*"
+int = "/d/d*"
+single_char_operator = '''+|-|\*|\/|^|=|\.|\(|\)|{|}|'|"'''
+multi_char_operator = "==|\!=|>=|<=|>|<"
+skip = "\n| "

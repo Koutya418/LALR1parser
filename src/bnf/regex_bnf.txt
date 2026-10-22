@@ -1,0 +1,28 @@
+S ::= <regex>;
+
+<regex> ::= <alternation>;
+
+<alternation> ::= <concatenation>
+                | <concatenation> "|" <alternation>;
+
+<concatenation> ::= <repetition>
+                  | <repetition> <concatenation>;
+
+<repetition> ::= <atom>
+                | <atom> <quantifier>
+                | <atom> <quantifier> <match_option>;
+
+<quantifier> ::= "*"
+               | "+"
+               | "?";
+
+<match_option> ::= "!";
+
+<atom> ::= <literal>
+         | "."
+         | ","
+         | <group>;
+
+<group> ::= "(" <regex> ")";
+
+<literal> ::= <ordinary_character>;
