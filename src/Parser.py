@@ -9,7 +9,7 @@ from components.common.States import States
 
 cwd = os.getcwd()
 
-def Toknizer(tokenizer_path:str, file_path:str, bnf_path:str):
+def Tokenizer(tokenizer_path:str, file_path:str, bnf_path:str):
   result_pattern:list[str] = []
   with open(cwd + tokenizer_path, encoding='utf-8', mode='r') as f:
     input_str = f.read()
@@ -80,7 +80,7 @@ def Toknizer(tokenizer_path:str, file_path:str, bnf_path:str):
       result_tokens.append(InputToken(token_type, token))
   return result_tokens
 
-input = Toknizer('/src/tokenizer.txt', '/src/test.txt', '/src/bnf.txt')
+input = Tokenizer('/src/tokenizer.txt', '/src/test.txt', '/src/bnf.txt')
 syntax = Syntax('/src/bnf.txt')
 states = States()
 states.LR0_table_gen(syntax)
