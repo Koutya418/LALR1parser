@@ -1,28 +1,28 @@
-from components.common.Data import Token, InputToken
+from components.common.Data import SyntaxTreeNode, InputToken
 
-def ast_gen(token:Token):
-  tok_sym = token.token_sym
-  if len(token.next_token) > 1:
+def ast_gen(node:SyntaxTreeNode):
+  tok_sym = node.node_sym
+  if len(node.next_nodes) > 1:
     ret_tok_list = []
-    for tok in token.next_token:
+    for tok in node.next_nodes:
       ret = tok
-      if type(tok) == Token:
+      if type(tok) == SyntaxTreeNode:
         ret = ast_gen(tok)
         if type(ret) != InputToken:
           match ret:
             case "*": #量化子処理用
-              if token.token_sym == "<repetition>":
+              if node.node_sym == "<repetition>":
                 tok_sym = "<star>"
                 continue
       if tok == "|" or tok == "(" or tok == ")":
         continue
       ret_tok_list.append(ret)
-    return Token(token.token_type, tok_sym, ret_tok_list)
-  elif len(token.next_token) == 1:
-    ret = token.next_token[0]
+    return SyntaxTreeNode(node.node_type, tok_sym, ret_tok_list)
+  elif len(node.next_nodes) == 1:
+    ret = node.next_nodes[0]
     if type(ret) == InputToken:
       ret = ret
-    elif type(ret) == Token:
+    elif type(ret) == SyntaxTreeNode:
       ret = ast_gen(ret)
     elif type(ret) == str:
       ret = ret
@@ -33,4 +33,4 @@ def ast_gen(token:Token):
           ret = "<comma>"
     return ret
   else:
-    return token.token_sym
+    return node.node_sym

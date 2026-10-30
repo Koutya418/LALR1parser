@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from collections import deque
-from components.common.Data import Token, InputToken
+from components.common.Data import SyntaxTreeNode, InputToken
 
 @dataclass
 class NFA_state:
@@ -24,7 +24,7 @@ class Regex_state:
   state: int
 
 class NFA:
-  def __init__(self, ast: Token):
+  def __init__(self, ast: SyntaxTreeNode):
     self.table:dict[int, NFA_state] = {}
     end_id = self.nfa_table_gen(ast)
     self.end_id = end_id.end
@@ -32,15 +32,15 @@ class NFA:
     self.class_lower_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     self.class_upper_alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-  def nfa_table_gen(self, ast: Token|InputToken|str):
+  def nfa_table_gen(self, ast: SyntaxTreeNode|InputToken|str):
     ret = None
     match ast:
       case str():
         ret = self.literal_gen(ast)
       case InputToken():
         ret = self.literal_gen(ast.char)
-      case Token():
-        match ast.token_sym:
+      case SyntaxTreeNode():
+        match ast.node_sym:
           case "<concatenation>":
             ret = self.concatenation_gen(ast)
           case "<alternation>":
@@ -48,24 +48,24 @@ class NFA:
           case "<star>":
             ret = self.star_gen(ast)
           case "<group>":
-            ret = self.nfa_table_gen(ast.next_token[0])
+            ret = self.nfa_table_gen(ast.next_nodes[0])
     return ret
 
-  def star_gen(self, ast: Token):
+  def star_gen(self, ast: SyntaxTreeNode):
     id0 = len(self.table)
     self.table[id0] = NFA_state(None, set())
-    tok0 = ast.next_token[0]
-    match ast.next_token[0]:
+    tok0 = ast.next_nodes[0]
+    match ast.next_nodes[0]:
       case str() | InputToken():
         ret0 = self.literal_gen(tok0)
-      case Token():
+      case SyntaxTreeNode():
         ret0 = self.nfa_table_gen(tok0)
     id1 = len(self.table)
     self.table[id1] = NFA_state(None, set())
     id2 = len(self.table)
     mode = None
-    if len(ast.next_token) > 1:
-      match ast.next_token[1]:
+    if len(ast.next_nodes) > 1:
+      match ast.next_nodes[1]:
         case "!":
           mode = "lazy"
     self.table[id2] = NFA_state(None, set(), mode)
@@ -74,20 +74,20 @@ class NFA:
     self.set_table(ret0.end, [id1])
     return NFA_ret(id0, id2)
 
-  def concatenation_gen(self, ast: Token) -> NFA_ret:
-    tok0 = ast.next_token[0]
-    tok1 = ast.next_token[1]
+  def concatenation_gen(self, ast: SyntaxTreeNode) -> NFA_ret:
+    tok0 = ast.next_nodes[0]
+    tok1 = ast.next_nodes[1]
     match tok0:
       case str() | InputToken():
         ret0 = self.literal_gen(tok0)
-      case Token():
+      case SyntaxTreeNode():
         ret0 = self.nfa_table_gen(tok0)
     id0 = len(self.table)
     self.table[id0] = NFA_state(None, set())
     match tok1:
       case str() | InputToken():
         ret1 = self.literal_gen(tok1)
-      case Token():
+      case SyntaxTreeNode():
         ret1 = self.nfa_table_gen(tok1)
     self.set_table(ret0.end, id0)
     self.set_table(id0, ret1.start)
@@ -96,20 +96,20 @@ class NFA:
     self.set_table(ret1.end, id1)
     return NFA_ret(ret0.start, id1)
 
-  def alternation_gen(self, ast: Token) -> NFA_ret:
+  def alternation_gen(self, ast: SyntaxTreeNode) -> NFA_ret:
     id0 = len(self.table)
     self.table[id0] = NFA_state(None, set())
-    tok0 = ast.next_token[0]
-    tok1 = ast.next_token[1]
+    tok0 = ast.next_nodes[0]
+    tok1 = ast.next_nodes[1]
     match tok0:
       case str() | InputToken():
         ret0 = self.literal_gen(tok0)
-      case Token():
+      case SyntaxTreeNode():
         ret0 = self.nfa_table_gen(tok0)
     match tok1:
       case str() | InputToken():
         ret1 = self.literal_gen(tok1)
-      case Token():
+      case SyntaxTreeNode():
         ret1 = self.nfa_table_gen(tok1)
     id1 = len(self.table)
     self.table[id1] = NFA_state(None, set())

@@ -1,6 +1,6 @@
 from components.common.Syntax import Syntax
 from components.common.States import States
-from components.common.Data import LR0Item, State, EOF, Token, InputToken
+from components.common.Data import LR0Item, State, EOF, InputToken, SyntaxTreeNode
 from collections import deque
 
 import pprint
@@ -52,7 +52,7 @@ class LALR1:
     while len(input_deque) > 0:
       input_token = input_deque[0]
       if type(input_token) == InputToken:
-        input_token = input_token.tokentype
+        input_token = input_token.token_type
       action_data = self.table[stack[-1]][input_token]
       action = action_data.get("action")
       value = action_data.get("value")
@@ -78,24 +78,24 @@ class LALR1:
     reduce_rule = self.syntax.get_rule(result_deque.pop())
     reduce_symbol_type = self.syntax.get_symbol_type(reduce_rule.le)
     reduce_re = reversed(reduce_rule.re)
-    root_token = Token(reduce_symbol_type, reduce_rule.le, [])
+    root_node = SyntaxTreeNode(reduce_symbol_type, reduce_rule.le, [])
     for symbol in reduce_re:
       input_token = input_deque[-1]
       if type(input_token) == InputToken:
-        input_token = input_token.tokentype
+        input_token = input_token.token_type
       if symbol == input_token:
         add_item = None
         add_item_symbol_type = self.syntax.get_symbol_type(symbol)
         match add_item_symbol_type:
           case "nonterm":
-            add_item = Token(add_item_symbol_type, symbol, [input_deque[-1]])
+            add_item = SyntaxTreeNode(add_item_symbol_type, symbol, [input_deque[-1]])
           case "term":
             add_item = symbol
             if type(input_deque[-1]) == InputToken:
               add_item = input_deque[-1]
-        root_token.next_token.append(add_item)
+        root_node.next_nodes.append(add_item)
         input_deque.pop()
       else:
-        root_token.next_token.append(self.tree_gen(result, input, result_deque, input_deque))
-    root_token.next_token.reverse()
-    return root_token
+        root_node.next_nodes.append(self.tree_gen(result, input, result_deque, input_deque))
+    root_node.next_nodes.reverse()
+    return root_node

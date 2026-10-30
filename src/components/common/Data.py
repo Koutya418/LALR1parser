@@ -21,24 +21,24 @@ class Rule:
   re: tuple[str, ...]
 
 @dataclass
-class Token:
-  token_type: str
-  token_sym: str
-  next_token: list
+class SyntaxTreeNode:
+  node_type: str
+  node_sym: str
+  next_nodes: list
 
   def show(self, nest = 0):
     indent = ""
     for _ in range(nest):
         indent += " "
-    print(f"{indent}{self.token_sym}")
-    for token in self.next_token:
-      match token:
+    print(f"{indent}{self.node_sym}")
+    for node in self.next_nodes:
+      match node:
         case str():
-          print(indent + " " + token)
+          print(indent + " " + node)
         case InputToken():
-          token.show(indent + " ")
-        case Token():
-          token.show(nest + 1)
+          node.show(indent + " ")
+        case SyntaxTreeNode():
+          node.show(nest + 1)
 
 @dataclass(frozen=True)
 class LR0Item:
@@ -180,8 +180,8 @@ class State:
     return next_state_cores, links, spontaneous
 
 class InputToken:
-  def __init__(self, tokentype, char):
-    self.tokentype = tokentype
+  def __init__(self, token_type, char):
+    self.token_type = token_type
     self.char = char
 
   def show(self, f:str):
