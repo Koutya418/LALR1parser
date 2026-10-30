@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from collections import deque
 from components.common.Data import InputToken
-import json, os
+from pathlib import Path
+import json
 
-cwd = os.getcwd()
-bnf_json_path = "/src/components/common/json/regex_nfa.json"
+base_dir = Path(__file__).resolve().parent
+bnf_json_path = base_dir / "json" / "regex_nfa.json"
 
 @dataclass
 class NFA_state:
@@ -35,8 +36,8 @@ class Bnf_nfa:
     self.class_lower_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     self.class_upper_alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-  def load(self, path):
-    with open(cwd + path, mode="rt", encoding="utf-8") as f:
+  def load(self, path:Path):
+    with path.open(mode="rt", encoding="utf-8") as f:
       load_json = json.load(f)
       self.end_id = load_json["end_id"]
       load_table:dict = load_json["table"]
@@ -134,10 +135,10 @@ class Bnf_nfa:
       return_value = 0
     return Regex_ret(input[:max(result)], max(result), return_value)
 
-def bnf_tokenizer(bnf_path:str):
+def bnf_tokenizer(bnf_path:Path):
   nfa = Bnf_nfa(bnf_json_path)
   result = []
-  with open(cwd + bnf_path, mode="r", encoding="utf-8") as f:
+  with bnf_path.open(mode="r", encoding="utf-8") as f:
     input_stream = f.read()
     input_deque = deque(input_stream)
     while len(input_deque) > 0:

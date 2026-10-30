@@ -1,17 +1,21 @@
 import Lexer
-import os
 import components.common.BNF_Tokenizer as BNF_Toknizer
 from components.regex.NFA import NFA, Regex_ret
 from components.common.Data import InputToken, EOF
 from components.Lalr1 import LALR1
 from components.common.Syntax import Syntax
 from components.common.States import States
+from pathlib import Path
 
-cwd = os.getcwd()
+base_dir = Path(__file__).resolve().parent
 
-def Tokenizer(tokenizer_path:str, bnf_path:str, file_path:str):
+tokenizer_file_path = base_dir / "tokenizer.txt"
+bnf_file_path = base_dir / "bnf.txt"
+file_path = base_dir / "test.txt"
+
+def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path):
   result_pattern:list[str] = []
-  with open(cwd + tokenizer_path, encoding='utf-8', mode='r') as f:
+  with tokenizer_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
     tokens = Lexer.Toknizer("""/w*|".*!"|''',*'''| |\n|=""", input_str)
     tokens = [token for token in tokens if token != " " and token != "\n"]
@@ -35,7 +39,7 @@ def Tokenizer(tokenizer_path:str, bnf_path:str, file_path:str):
         rule = []
 
   result_strings = []
-  with open(cwd + file_path, encoding='utf-8', mode='r') as f:
+  with file_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
     toknizer_pattern = ""
     ignore_chars:list = []
@@ -93,4 +97,4 @@ def parse(tokenizer_path:str, bnf_path:str, file_path:str):
   result.show()
   return result
 
-parse("/src/tokenizer.txt", "/src/bnf.txt", "/src/test.txt")
+parse(tokenizer_file_path, bnf_file_path, file_path)

@@ -4,15 +4,16 @@ from components.common.Data import EOF, InputToken
 from components.Lalr1 import LALR1
 from components.regex.NFA import NFA
 from components.regex.AST_Generator import ast_gen
-import copy
 
+from pathlib import Path
 from collections import deque
 
-import os
-cwd = os.getcwd()
+base_dir = Path(__file__).resolve().parent
+
+regex_bnf_file_path = base_dir / "bnf" / "regex_bnf.txt"
 
 def NFA_gen(input_pattern:str):
-  syntax = Syntax("/src/bnf/regex_bnf.txt")
+  syntax = Syntax(regex_bnf_file_path)
 
   states = States()
 
