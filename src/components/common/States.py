@@ -1,12 +1,12 @@
 from __future__ import annotations
-from components.common.Data import State, LR0Item, Propagation_symbol, EOF
+from .Data import State, LR0Item, Propagation_symbol, EOF
 from collections import deque
 
 import pprint
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from components.common.Syntax import Syntax
+    from .Syntax import Syntax
 
 class States:
   def __init__(self):

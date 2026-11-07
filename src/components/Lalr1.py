@@ -1,12 +1,13 @@
-from components.common.Syntax import Syntax
-from components.common.States import States
-from components.common.Data import LR0Item, State, EOF, InputToken, SyntaxTreeNode
+from .common.Syntax import _Syntax, Syntax
+from .common.States import States
+from .common.Data import LR0Item, State, EOF, InputToken
+from .common.Nodes import SyntaxTreeNode
 from collections import deque
 
 import pprint
 
 class LALR1:
-  def __init__(self, syntax:Syntax, states:States, debug:bool = False):
+  def __init__(self, syntax:_Syntax|Syntax, states:States, debug:bool = False):
     self.syntax = syntax
     self.states = states
     self.table:dict[int, dict[str, dict[str, str]]] = {}
@@ -24,26 +25,65 @@ class LALR1:
           self.table[i][EOF] = {"action":"accept", "value":"accept"}
           continue
         if next_symbol is None:
+          add_table = {"action":"reduce", "value":item.rule_id}
           for symbol in state.la[item]:
             if symbol in self.table[i]:
-              if debug:
-                print(f"生成規則の上書きが発生しました")
-            self.table[i][symbol] = {"action":"reduce", "value":item.rule_id}
+              self.shift_reduce_conflict_solver(i, symbol, add_table, self.table[i][symbol])
+              continue
+            self.table[i][symbol] = add_table
           continue
-        action = "shift"
         value = None
         if next_symbol in next_state_cores:
           value = self.states.get_id(frozenset(next_state_cores[next_symbol]))
         if value is None:
           print("テーブル生成時に問題が発生しました")
-        if next_symbol in self.table[i]:
-          if debug:
-            print(f"生成規則の上書きが発生しました")
-        if self.syntax.is_term(next_symbol):
-          self.table[i][next_symbol] = {"action":action, "value": value}
-        else:
+        action = "shift"
+        if self.syntax.is_nonterm(next_symbol):
           action = "goto"
-          self.table[i][next_symbol] = {"action":action, "value": value}
+        add_table = {"action":action, "value": value}
+        if next_symbol in self.table[i]:
+          self.shift_reduce_conflict_solver(i, next_symbol, self.table[i][next_symbol], add_table)
+          continue
+        self.table[i][next_symbol] = add_table
+
+
+  def shift_reduce_conflict_solver(self, state, symbol, reduce_table:dict, shift_table:dict):
+    if not isinstance(self.syntax, Syntax):
+      return
+    if reduce_table == shift_table:
+      return
+    #print(f"テーブル生成時に衝突が発生しました{reduce_table}, {shift_table}")
+    if reduce_table.get("action") != "reduce":
+      return
+    if shift_table.get("action") != "shift":
+      return
+    reduce_precedence:dict = self.syntax.get_rule(int(reduce_table.get("value"))).prec
+    shift_precedence:dict = self.syntax.term_precedences.get(symbol)
+    if reduce_precedence is not None:
+      reduce_precedence = reduce_precedence.get("precedence")
+    if shift_precedence is not None:
+      shift_precedence = shift_precedence.get("precedence")
+    add_table = shift_table
+    if shift_precedence is None or reduce_precedence is None:
+      pass
+    elif shift_precedence > reduce_precedence:
+      pass
+    elif shift_precedence < reduce_precedence:
+      add_table = reduce_table
+    elif shift_precedence == reduce_precedence:
+      associativity = self.syntax.term_precedences.get(symbol)
+      if associativity is None:
+        return
+      associativity = associativity.get("associativity")
+      match associativity:
+        case "left":
+          add_table = reduce_table
+        case "right":
+          pass
+        case "nonassoc":
+          raise ValueError
+    self.table[state][symbol] = add_table
+
 
   def parse(self, input:list):
     input_deque = deque(input)

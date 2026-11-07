@@ -1,0 +1,9 @@
+term = '''",*"'''
+nonterm = "<,*>"
+token = "/w*"
+eq = "::="
+end = ";"
+or = "\|"
+start = "S'"
+prec = "%left|%right|%prec"
+skip = "\n| "

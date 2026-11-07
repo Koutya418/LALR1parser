@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from collections import deque
-from components.common.Data import InputToken
+from .Data import InputToken
 from pathlib import Path
 import json
 

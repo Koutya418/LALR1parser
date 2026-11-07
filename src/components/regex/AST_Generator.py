@@ -1,4 +1,5 @@
-from components.common.Data import SyntaxTreeNode, InputToken
+from ..common.Data import InputToken
+from ..common.Nodes import SyntaxTreeNode
 
 def ast_gen(node:SyntaxTreeNode):
   tok_sym = node.node_sym

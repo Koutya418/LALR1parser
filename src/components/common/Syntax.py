@@ -1,10 +1,12 @@
-from components.common.Data import Rule, Propagation_symbol, EOF
-from components.common.BNF_Tokenizer import bnf_tokenizer
+from .Data import Rule, Propagation_symbol, EOF
+from .BNF_Tokenizer import bnf_tokenizer
 from collections import deque
 from dataclasses import dataclass
+from .Nodes import *
+import pprint
 
-class Syntax:
-  def __init__(self, path):
+class _Syntax:
+  def __init__(self, rule):
     self.rules:tuple[Rule]
     self.symbols:set[str]
     self.nonterm_symbols:set[str]
@@ -14,7 +16,7 @@ class Syntax:
       self.symbols,
       self.nonterm_symbols,
       self.nonterm_to_rules
-    ) = self.gen_rule(path)
+    ) = self.gen_rule(rule)
     self.nullable_symbols:set = set(["<eps>"])
     self.nullable_symbols_gen()
     self.first_set:dict[str, set] = self.first_set_gen()
@@ -61,6 +63,58 @@ class Syntax:
             re.append(append_re)
       old_bnf_token = bnf_token
     return result_rules, result_symbols, result_nonterm_symbols, result_nonterm_to_rules
+
+  def ast_to_gen_rule(self, node:SyntaxNode):
+    result_rules:list[Rule] = []
+    result_symbols:set = set()
+    result_nonterm_symbols:set = set()
+    result_nonterm_to_rules:dict[str, set] = {}
+    result_term_precedences:dict[str, dict[str, int|str]] = {}
+    precedence = 0
+    if not isinstance(node, SyntaxNode):
+      raise ValueError
+    for rules in node.rules:
+      match rules:
+        case PrecDefinitionNode():
+          associativity = None
+          match rules.prec:
+            case "%left":
+              associativity = "left"
+            case "%right":
+              associativity = "right"
+          for symbol in rules.symbols:
+            if symbol in result_term_precedences:
+              raise ValueError
+            result_term_precedences[symbol] = {"precedence":precedence, "associativity":associativity}
+          precedence += 1
+        case RuleDefinitionNode():
+          le = rules.lhs
+          result_symbols.add(le)
+          result_nonterm_symbols.add(le)
+          for rule in rules.rules:
+            if not isinstance(rule, RuleNode):
+              raise ValueError
+            re = rule.rule_items
+            if "<eps>" in re:
+              re = [symbol for symbol in re if symbol != "<eps>"]
+            result_symbols |= set(re)
+            rule_id = len(result_rules)
+            if le not in result_nonterm_to_rules:
+              result_nonterm_to_rules[le] = set()
+            result_nonterm_to_rules[le].add(rule_id)
+            result_rules.append(Rule(rule_id, le, tuple(re), rule.prec))
+    terms = result_symbols - result_nonterm_symbols
+    for rule in result_rules:
+      if rule.prec is not None:
+        rule.prec = result_term_precedences.get(rule.prec)
+        continue
+      if not (set(rule.re) & terms):
+        continue
+      for symbol in reversed(rule.re):
+        if symbol in terms:
+          rule.prec = result_term_precedences.get(symbol)
+          break
+    return result_rules, result_symbols, result_nonterm_symbols, result_nonterm_to_rules, result_term_precedences
 
   def nullable_symbols_gen(self):
     old_nullable_symbols: set = set()
@@ -153,3 +207,75 @@ class Syntax:
     if self.is_nonterm(key):
       result = self.nonterm_to_rules.get(key)
     return result
+
+class Syntax(_Syntax):
+  def __init__(self, rule):
+    self.rules:tuple[Rule]
+    self.symbols:set[str]
+    self.nonterm_symbols:set[str]
+    self.nonterm_to_rules:dict[str, set]
+    self.term_precedences:dict[str, dict[str, int|str]]
+    (
+      self.rules,
+      self.symbols,
+      self.nonterm_symbols,
+      self.nonterm_to_rules,
+      self.term_precedences
+    ) = self.gen_rule(rule)
+    self.nullable_symbols:set = set(["<eps>"])
+    self.nullable_symbols_gen()
+    self.first_set:dict[str, set] = self.first_set_gen()
+    self.first_set[Propagation_symbol] = set([Propagation_symbol])
+    self.first_set[EOF] = set([EOF])
+
+  def gen_rule(self, node:SyntaxNode):
+    result_rules:list[Rule] = []
+    result_symbols:set = set()
+    result_nonterm_symbols:set = set()
+    result_nonterm_to_rules:dict[str, set] = {}
+    result_term_precedences:dict[str, dict[str, int|str]] = {}
+    precedence = 0
+    if not isinstance(node, SyntaxNode):
+      raise ValueError
+    for rules in node.rules:
+      match rules:
+        case PrecDefinitionNode():
+          associativity = None
+          match rules.prec:
+            case "%left":
+              associativity = "left"
+            case "%right":
+              associativity = "right"
+          for symbol in rules.symbols:
+            if symbol in result_term_precedences:
+              raise ValueError
+            result_term_precedences[symbol] = {"precedence":precedence, "associativity":associativity}
+          precedence += 1
+        case RuleDefinitionNode():
+          le = rules.lhs
+          result_symbols.add(le)
+          result_nonterm_symbols.add(le)
+          for rule in rules.rules:
+            if not isinstance(rule, RuleNode):
+              raise ValueError
+            re = rule.rule_items
+            if "<eps>" in re:
+              re = [symbol for symbol in re if symbol != "<eps>"]
+            result_symbols |= set(re)
+            rule_id = len(result_rules)
+            if le not in result_nonterm_to_rules:
+              result_nonterm_to_rules[le] = set()
+            result_nonterm_to_rules[le].add(rule_id)
+            result_rules.append(Rule(rule_id, le, tuple(re), rule.prec))
+    terms = result_symbols - result_nonterm_symbols
+    for rule in result_rules:
+      if rule.prec is not None:
+        rule.prec = result_term_precedences.get(rule.prec)
+        continue
+      if not (set(rule.re) & terms):
+        continue
+      for symbol in reversed(rule.re):
+        if symbol in terms:
+          rule.prec = result_term_precedences.get(symbol)
+          break
+    return result_rules, result_symbols, result_nonterm_symbols, result_nonterm_to_rules, result_term_precedences

@@ -4,7 +4,7 @@ from collections import deque
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from components.common.Syntax import Syntax
+    from .Syntax import Syntax
 
 @dataclass(frozen=True)
 class Propagation_symbol:
@@ -14,31 +14,12 @@ class Propagation_symbol:
 class EOF:
   pass
 
-@dataclass(frozen=True)
+@dataclass
 class Rule:
   rule_id: int
   le: str
   re: tuple[str, ...]
-
-@dataclass
-class SyntaxTreeNode:
-  node_type: str
-  node_sym: str
-  next_nodes: list
-
-  def show(self, nest = 0):
-    indent = ""
-    for _ in range(nest):
-        indent += " "
-    print(f"{indent}{self.node_sym}")
-    for node in self.next_nodes:
-      match node:
-        case str():
-          print(indent + " " + node)
-        case InputToken():
-          node.show(indent + " ")
-        case SyntaxTreeNode():
-          node.show(nest + 1)
+  prec: int|None = None
 
 @dataclass(frozen=True)
 class LR0Item:

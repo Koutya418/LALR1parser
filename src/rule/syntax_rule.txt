@@ -1,0 +1,40 @@
+S ::= <syntax>;
+
+<syntax> ::= <syntax> <declaration>
+            | <declaration>;
+
+<declaration> ::= <rule_definition>
+                  | <prec>;
+
+<rule_lhs> ::= start
+              | <nonterm>;
+
+<rule_definition> ::= <rule_lhs> "::=" <rule_list> ";";
+
+<rule_list> ::= <rule_list> "|" <rule>
+                | <rule>;
+
+<rule> ::=  <rule_items> "%prec" <token>
+          | <rule_items>;
+
+<rule_items> ::= <rule_items> <rule_item>
+                | <rule_item>;
+
+<rule_item> ::= <nonterm>
+              | <term>
+              | <token>;
+
+<prec> ::= "%left" <prec_list>
+          | "%right" <prec_list>;
+
+<prec_list> ::= <prec_list> <prec_token>
+              | <prec_token>;
+
+<prec_token> ::= <term>
+               | <token>;
+
+<nonterm> ::= nonterm;
+
+<term> ::= term;
+
+<token> ::= token;

@@ -1,0 +1,7 @@
+
+S' ::= <expression>;
+
+<expression> ::= digit <optional> digit;
+
+<optional> ::= "+"
+             | "<eps>";

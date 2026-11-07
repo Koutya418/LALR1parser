@@ -1,19 +1,19 @@
-from components.common.Syntax import Syntax
-from components.common.States import States
-from components.common.Data import EOF, InputToken
-from components.Lalr1 import LALR1
-from components.regex.NFA import NFA
-from components.regex.AST_Generator import ast_gen
+from .components.common.Syntax import _Syntax
+from .components.common.States import States
+from .components.common.Data import EOF, InputToken
+from .components.Lalr1 import LALR1
+from .components.regex.NFA import NFA
+from .components.regex.AST_Generator import ast_gen
 
 from pathlib import Path
 from collections import deque
 
 base_dir = Path(__file__).resolve().parent
 
-regex_bnf_file_path = base_dir / "bnf" / "regex_bnf.txt"
+regex_bnf_file_path = base_dir / "rule" / "regex_rule.txt"
 
 def NFA_gen(input_pattern:str):
-  syntax = Syntax(regex_bnf_file_path)
+  syntax = _Syntax(regex_bnf_file_path)
 
   states = States()
 

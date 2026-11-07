@@ -1,19 +1,23 @@
-import Lexer
-import components.common.BNF_Tokenizer as BNF_Toknizer
-from components.regex.NFA import NFA, Regex_ret
-from components.common.Data import InputToken, EOF
-from components.Lalr1 import LALR1
-from components.common.Syntax import Syntax
-from components.common.States import States
+from . import Lexer
+from .components.common import BNF_Tokenizer
+from .components.regex.NFA import NFA, Regex_ret
+from .components.common.Data import InputToken, EOF
+from .components.Lalr1 import LALR1
+from .components.common.Syntax import _Syntax, Syntax
+from .components.common.States import States
 from pathlib import Path
+from . import SyntaxAstGenerator
+from .components.common.Nodes import SyntaxTreeNode
 
 base_dir = Path(__file__).resolve().parent
 
+bnf_tokenizer_path = base_dir / "rule" / "syntax_rule_tokenizer.txt"
+syntax_rule_bnf_path = base_dir / "rule" / "syntax_rule.txt"
 tokenizer_file_path = base_dir / "tokenizer.txt"
 bnf_file_path = base_dir / "bnf.txt"
-file_path = base_dir / "test.txt"
+file = base_dir / "test.txt"
 
-def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path):
+def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = None):
   result_pattern:list[str] = []
   with tokenizer_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
@@ -71,10 +75,13 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path):
 
   reserved_word = []
   result_tokens:list = []
-  result_bnf = BNF_Toknizer.bnf_tokenizer(bnf_path)
-  for token in result_bnf:
-    if token[0] == '"' and token[-1] == '"':
-      reserved_word.append(token[1:-1])
+  if terms is not None:
+    reserved_word = terms
+  else:
+    result_bnf = BNF_Tokenizer.bnf_tokenizer(bnf_path)
+    for token in result_bnf:
+      if token[0] == '"' and token[-1] == '"':
+        reserved_word.append(token[1:-1])
   for token_data in tokens:
     token_type = token_data[0]
     token = token_data[1]
@@ -84,9 +91,9 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path):
       result_tokens.append(InputToken(token_type, token))
   return result_tokens
 
-def parse(tokenizer_path:str, bnf_path:str, file_path:str):
+def _parse(tokenizer_path:str, bnf_path:str, file_path:str):
   input = Tokenizer(tokenizer_path, bnf_path, file_path)
-  syntax = Syntax(bnf_path)
+  syntax = _Syntax(bnf_path)
   states = States()
   states.LR0_table_gen(syntax)
   states.lalr1_gen(syntax)
@@ -94,7 +101,18 @@ def parse(tokenizer_path:str, bnf_path:str, file_path:str):
   input.append(EOF)
   result = lalr1.parse(input)
   result = lalr1.tree_gen(result, input[:-1])
-  result.show()
   return result
 
-parse(tokenizer_file_path, bnf_file_path, file_path)
+def parse(tokenizer_path:str, bnf_path:str, file_path:str) -> SyntaxTreeNode:
+  syntax = _parse(bnf_tokenizer_path, syntax_rule_bnf_path, bnf_path)
+  syntax = SyntaxAstGenerator.sytanx_ast_generator(syntax)
+  syntax = Syntax(syntax)
+  states = States()
+  states.LR0_table_gen(syntax)
+  states.lalr1_gen(syntax)
+  lalr1 = LALR1(syntax, states)
+  input = Tokenizer(tokenizer_path, bnf_path, file_path, syntax.symbols - syntax.nonterm_symbols)
+  input.append(EOF)
+  result = lalr1.parse(input)
+  result = lalr1.tree_gen(result, input[:-1])
+  return result

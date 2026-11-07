@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from collections import deque
-from components.common.Data import SyntaxTreeNode, InputToken
+from ..common.Data import InputToken
+from ..common.Nodes import SyntaxTreeNode
 
 @dataclass
 class NFA_state:
