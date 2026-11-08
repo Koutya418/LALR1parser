@@ -254,6 +254,8 @@ class NFA:
             continue
           return Regex_ret(input[:count], count, return_value)
       states = next_states
+      if not states:
+        break
     if max(result) >= len(input) and self.end_id in states:
       return_value = 0
     return Regex_ret(input[:max(result)], max(result), return_value)
