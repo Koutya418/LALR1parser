@@ -64,7 +64,7 @@ def NFA_gen(input_pattern:str):
   result = ast_gen(result)
   return NFA(result)
 
-def Toknizer(pattern:str|Path, input_str:str):
+def Tokenizer(pattern:str|Path, input_str:str):
   if isinstance(pattern, str):
     nfa = NFA_gen(pattern)
   elif isinstance(pattern, Path):

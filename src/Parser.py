@@ -22,7 +22,7 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
   result_pattern:list[str] = []
   with tokenizer_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
-    tokens = Lexer.Toknizer(tokenizer_tokenizer_file_path, input_str)
+    tokens = Lexer.Tokenizer(tokenizer_tokenizer_file_path, input_str)
     tokens = [token for token in tokens if token != " " and token != "\n"]
     
     rule = []
@@ -60,7 +60,7 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
       toknizer_pattern += rule_chars
       toknizer_pattern += "|"
     toknizer_pattern = toknizer_pattern[:-1]
-    tokens = Lexer.Toknizer(toknizer_pattern, input_str)
+    tokens = Lexer.Tokenizer(toknizer_pattern, input_str)
     result_strings = [token for token in tokens if token not in ignore_chars]
 
   tokens = []
