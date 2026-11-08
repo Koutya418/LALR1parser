@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from collections import deque
 from ..common.Data import InputToken
 from ..common.Nodes import SyntaxTreeNode
+import json
+from pathlib import Path
 
 @dataclass
 class NFA_state:
@@ -25,10 +27,22 @@ class Regex_state:
   state: int
 
 class NFA:
-  def __init__(self, ast: SyntaxTreeNode):
+  def __init__(self, data: SyntaxTreeNode|Path):
     self.table:dict[int, NFA_state] = {}
-    end_id = self.nfa_table_gen(ast)
-    self.end_id = end_id.end
+    end_id = None
+    if isinstance(data, SyntaxTreeNode):
+      end_id = self.nfa_table_gen(data).end
+    elif isinstance(data, str):
+      end_id = self.nfa_table_gen(data).end
+    elif isinstance(data, InputToken):
+      end_id = self.nfa_table_gen(data).end
+    elif isinstance(data, Path):
+      end_id = self.nfa_table_load(data)
+    else:
+      raise ValueError(
+        f"{data}"
+      )
+    self.end_id = end_id
     self.class_digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     self.class_lower_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     self.class_upper_alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
@@ -51,6 +65,14 @@ class NFA:
           case "<group>":
             ret = self.nfa_table_gen(ast.next_nodes[0])
     return ret
+
+  def nfa_table_load(self, path:Path):
+    with path.open(mode="r", encoding="utf-8") as f:
+      nfa_data:dict = json.load(f)
+      table:dict[str, dict] = nfa_data.get("table")
+      for i in range(len(table)):
+        self.table[i] = NFA_state(table.get(str(i)).get("symbol"), set(table.get(str(i)).get("goto")), table.get(str(i)).get("mode"))
+      return nfa_data.get("end_id")
 
   def star_gen(self, ast: SyntaxTreeNode):
     id0 = len(self.table)
@@ -159,6 +181,18 @@ class NFA:
         worklist.extend(goto_list)
     return result
 
+  def json_table_output(self, path:Path):
+    result:dict = {}
+    result["table"] = {}
+    for i in range(len(self.table)):
+      state = self.table.get(i)
+      if state is None:
+        raise ValueError
+      result["table"][i] = {"symbol":state.sym, "goto":tuple(state.goto), "mode":state.mode}
+    result["end_id"] = self.end_id
+    with path.open(mode="w", encoding="utf-8") as f:
+      json.dump(result, f, indent=2)
+  
   def reg(self, input):
     states = self.eps_closure(set([0]))
     return_value = -1

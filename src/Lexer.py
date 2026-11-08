@@ -7,20 +7,17 @@ from .components.regex.AST_Generator import ast_gen
 
 from pathlib import Path
 from collections import deque
+import pprint
 
 base_dir = Path(__file__).resolve().parent
 
-regex_bnf_file_path = base_dir / "rule" / "regex_rule.txt"
+regex_bnf_json_path = base_dir / "json" / "regex_rule.json"
 
 def NFA_gen(input_pattern:str):
-  syntax = _Syntax(regex_bnf_file_path)
+  syntax = _Syntax(regex_bnf_json_path, True)
 
-  states = States()
 
-  states.LR0_table_gen(syntax)
-  states.lalr1_gen(syntax)
-
-  lalr1 = LALR1(syntax, states)
+  lalr1 = LALR1(syntax, States(), regex_bnf_json_path)
 
   pattern = list(input_pattern)
 
@@ -64,12 +61,16 @@ def NFA_gen(input_pattern:str):
   tokens.append(EOF)
 
   result = lalr1.parse(tokens)
-  result = lalr1.tree_gen(result, tokens[:-1])
   result = ast_gen(result)
   return NFA(result)
 
-def Toknizer(pattern:str, input_str:str):
-  nfa = NFA_gen(pattern)
+def Toknizer(pattern:str|Path, input_str:str):
+  if isinstance(pattern, str):
+    nfa = NFA_gen(pattern)
+  elif isinstance(pattern, Path):
+    nfa = NFA(pattern)
+  else:
+    raise ValueError
   result = []
   input_deque = deque(input_str)
   count = 0

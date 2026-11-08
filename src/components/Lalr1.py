@@ -3,15 +3,19 @@ from .common.States import States
 from .common.Data import LR0Item, State, EOF, InputToken
 from .common.Nodes import SyntaxTreeNode
 from collections import deque
-
+from pathlib import Path
 import pprint
+import json
 
 class LALR1:
-  def __init__(self, syntax:_Syntax|Syntax, states:States, debug:bool = False):
+  def __init__(self, syntax:_Syntax|Syntax, states:States, table_json_path:Path = None, debug:bool = False):
     self.syntax = syntax
     self.states = states
     self.table:dict[int, dict[str, dict[str, str]]] = {}
-    self.lalr1_table_gen(debug)
+    if table_json_path is None:
+      self.lalr1_table_gen(debug)
+    else:
+      self.json_table_load(table_json_path)
 
   def lalr1_table_gen(self, debug):
     end_item = LR0Item(0, len(self.syntax.get_rule(0).re))
@@ -46,6 +50,29 @@ class LALR1:
           continue
         self.table[i][next_symbol] = add_table
 
+  def json_table_output(self):
+    result = {}
+    for i, state in self.table.items():
+      result[i] = {}
+      for symbol, action in state.items():
+        add_symbol = symbol
+        if add_symbol is EOF:
+          add_symbol = "__class__:EOF"
+        result[i][add_symbol] = action
+    return result
+
+  def json_table_load(self, path:Path):
+    with path.open(mode="r", encoding="utf-8") as f:
+      json_data:dict = json.load(f)
+      table_data:dict[int, dict[str, dict[str, str]]] = json_data.get("lalr1")
+      for i, state in table_data.items():
+        self.table[int(i)] = {}
+        for symbol, action in state.items():
+          if symbol == "__class__:EOF":
+            self.table[int(i)][EOF] = action
+          else:
+            self.table[int(i)][symbol] = action
+          
 
   def shift_reduce_conflict_solver(self, state, symbol, reduce_table:dict, shift_table:dict):
     if not isinstance(self.syntax, Syntax):
@@ -88,6 +115,7 @@ class LALR1:
   def parse(self, input:list):
     input_deque = deque(input)
     stack = [0]
+    node_stack = []
     result = []
     while len(input_deque) > 0:
       input_token = input_deque[0]
@@ -98,17 +126,25 @@ class LALR1:
       value = action_data.get("value")
       match action:
         case "shift":
-          input_deque.popleft()
+          node = input_deque.popleft()
+          node_stack.append(node)
           stack.append(value)
         case "reduce":
           result.append(value)
+          add_nodes = []
           for _ in range(len(self.syntax.get_rule(value).re)):
             stack.pop()
+            node = node_stack.pop()
+            add_nodes.append(node)
+          add_nodes.reverse()
           le = self.syntax.get_rule(value).le
+          node_stack.append(SyntaxTreeNode("nonterm", le, add_nodes))
           goto_data = self.table[stack[-1]][le]
           stack.append(goto_data["value"])
         case "accept":
-          return result
+          if len(node_stack) != 1:
+            raise ValueError
+          return node_stack[0]
 
   def tree_gen(self, result:list[int], input:list, result_deque:deque = None, input_deque:deque = None):
     if result_deque is None:

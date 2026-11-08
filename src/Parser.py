@@ -16,12 +16,13 @@ syntax_rule_bnf_path = base_dir / "rule" / "syntax_rule.txt"
 tokenizer_file_path = base_dir / "tokenizer.txt"
 bnf_file_path = base_dir / "bnf.txt"
 file = base_dir / "test.txt"
+tokenizer_tokenizer_file_path = base_dir / "json" / "Tokenizer_NFA.json"
 
 def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = None):
   result_pattern:list[str] = []
   with tokenizer_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
-    tokens = Lexer.Toknizer("""/w*|".*!"|''',*'''| |\n|=""", input_str)
+    tokens = Lexer.Toknizer(tokenizer_tokenizer_file_path, input_str)
     tokens = [token for token in tokens if token != " " and token != "\n"]
     
     rule = []
@@ -100,7 +101,6 @@ def _parse(tokenizer_path:str, bnf_path:str, file_path:str):
   lalr1 = LALR1(syntax, states)
   input.append(EOF)
   result = lalr1.parse(input)
-  result = lalr1.tree_gen(result, input[:-1])
   return result
 
 def parse(tokenizer_path:str, bnf_path:str, file_path:str) -> SyntaxTreeNode:
@@ -114,5 +114,4 @@ def parse(tokenizer_path:str, bnf_path:str, file_path:str) -> SyntaxTreeNode:
   input = Tokenizer(tokenizer_path, bnf_path, file_path, syntax.symbols - syntax.nonterm_symbols)
   input.append(EOF)
   result = lalr1.parse(input)
-  result = lalr1.tree_gen(result, input[:-1])
   return result

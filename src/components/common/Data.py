@@ -19,7 +19,7 @@ class Rule:
   rule_id: int
   le: str
   re: tuple[str, ...]
-  prec: int|None = None
+  prec: int|dict|None = None
 
 @dataclass(frozen=True)
 class LR0Item:

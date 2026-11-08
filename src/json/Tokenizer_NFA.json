@@ -1,0 +1,525 @@
+{
+  "table": {
+    "0": {
+      "symbol": null,
+      "goto": [
+        1,
+        6
+      ],
+      "mode": null
+    },
+    "1": {
+      "symbol": null,
+      "goto": [
+        2,
+        5
+      ],
+      "mode": null
+    },
+    "2": {
+      "symbol": "<class-meta-digits-alphabet>",
+      "goto": [
+        3
+      ],
+      "mode": null
+    },
+    "3": {
+      "symbol": null,
+      "goto": [
+        4
+      ],
+      "mode": null
+    },
+    "4": {
+      "symbol": null,
+      "goto": [
+        2,
+        5
+      ],
+      "mode": null
+    },
+    "5": {
+      "symbol": null,
+      "goto": [
+        70
+      ],
+      "mode": null
+    },
+    "6": {
+      "symbol": null,
+      "goto": [
+        20,
+        7
+      ],
+      "mode": null
+    },
+    "7": {
+      "symbol": "\"",
+      "goto": [
+        8
+      ],
+      "mode": null
+    },
+    "8": {
+      "symbol": null,
+      "goto": [
+        9
+      ],
+      "mode": null
+    },
+    "9": {
+      "symbol": null,
+      "goto": [
+        10
+      ],
+      "mode": null
+    },
+    "10": {
+      "symbol": null,
+      "goto": [
+        11,
+        14
+      ],
+      "mode": null
+    },
+    "11": {
+      "symbol": "<dot>",
+      "goto": [
+        12
+      ],
+      "mode": null
+    },
+    "12": {
+      "symbol": null,
+      "goto": [
+        13
+      ],
+      "mode": null
+    },
+    "13": {
+      "symbol": null,
+      "goto": [
+        11,
+        14
+      ],
+      "mode": null
+    },
+    "14": {
+      "symbol": null,
+      "goto": [
+        15
+      ],
+      "mode": "lazy"
+    },
+    "15": {
+      "symbol": null,
+      "goto": [
+        16
+      ],
+      "mode": null
+    },
+    "16": {
+      "symbol": "\"",
+      "goto": [
+        17
+      ],
+      "mode": null
+    },
+    "17": {
+      "symbol": null,
+      "goto": [
+        18
+      ],
+      "mode": null
+    },
+    "18": {
+      "symbol": null,
+      "goto": [
+        19
+      ],
+      "mode": null
+    },
+    "19": {
+      "symbol": null,
+      "goto": [
+        67
+      ],
+      "mode": null
+    },
+    "20": {
+      "symbol": null,
+      "goto": [
+        50,
+        21
+      ],
+      "mode": null
+    },
+    "21": {
+      "symbol": "'",
+      "goto": [
+        22
+      ],
+      "mode": null
+    },
+    "22": {
+      "symbol": null,
+      "goto": [
+        23
+      ],
+      "mode": null
+    },
+    "23": {
+      "symbol": null,
+      "goto": [
+        24
+      ],
+      "mode": null
+    },
+    "24": {
+      "symbol": "'",
+      "goto": [
+        25
+      ],
+      "mode": null
+    },
+    "25": {
+      "symbol": null,
+      "goto": [
+        26
+      ],
+      "mode": null
+    },
+    "26": {
+      "symbol": null,
+      "goto": [
+        27
+      ],
+      "mode": null
+    },
+    "27": {
+      "symbol": "'",
+      "goto": [
+        28
+      ],
+      "mode": null
+    },
+    "28": {
+      "symbol": null,
+      "goto": [
+        29
+      ],
+      "mode": null
+    },
+    "29": {
+      "symbol": null,
+      "goto": [
+        30
+      ],
+      "mode": null
+    },
+    "30": {
+      "symbol": null,
+      "goto": [
+        34,
+        31
+      ],
+      "mode": null
+    },
+    "31": {
+      "symbol": "<comma>",
+      "goto": [
+        32
+      ],
+      "mode": null
+    },
+    "32": {
+      "symbol": null,
+      "goto": [
+        33
+      ],
+      "mode": null
+    },
+    "33": {
+      "symbol": null,
+      "goto": [
+        34,
+        31
+      ],
+      "mode": null
+    },
+    "34": {
+      "symbol": null,
+      "goto": [
+        35
+      ],
+      "mode": null
+    },
+    "35": {
+      "symbol": null,
+      "goto": [
+        36
+      ],
+      "mode": null
+    },
+    "36": {
+      "symbol": "'",
+      "goto": [
+        37
+      ],
+      "mode": null
+    },
+    "37": {
+      "symbol": null,
+      "goto": [
+        38
+      ],
+      "mode": null
+    },
+    "38": {
+      "symbol": null,
+      "goto": [
+        39
+      ],
+      "mode": null
+    },
+    "39": {
+      "symbol": "'",
+      "goto": [
+        40
+      ],
+      "mode": null
+    },
+    "40": {
+      "symbol": null,
+      "goto": [
+        41
+      ],
+      "mode": null
+    },
+    "41": {
+      "symbol": null,
+      "goto": [
+        42
+      ],
+      "mode": null
+    },
+    "42": {
+      "symbol": "'",
+      "goto": [
+        43
+      ],
+      "mode": null
+    },
+    "43": {
+      "symbol": null,
+      "goto": [
+        44
+      ],
+      "mode": null
+    },
+    "44": {
+      "symbol": null,
+      "goto": [
+        45
+      ],
+      "mode": null
+    },
+    "45": {
+      "symbol": null,
+      "goto": [
+        46
+      ],
+      "mode": null
+    },
+    "46": {
+      "symbol": null,
+      "goto": [
+        47
+      ],
+      "mode": null
+    },
+    "47": {
+      "symbol": null,
+      "goto": [
+        48
+      ],
+      "mode": null
+    },
+    "48": {
+      "symbol": null,
+      "goto": [
+        49
+      ],
+      "mode": null
+    },
+    "49": {
+      "symbol": null,
+      "goto": [
+        64
+      ],
+      "mode": null
+    },
+    "50": {
+      "symbol": null,
+      "goto": [
+        51,
+        53
+      ],
+      "mode": null
+    },
+    "51": {
+      "symbol": " ",
+      "goto": [
+        52
+      ],
+      "mode": null
+    },
+    "52": {
+      "symbol": null,
+      "goto": [
+        61
+      ],
+      "mode": null
+    },
+    "53": {
+      "symbol": null,
+      "goto": [
+        56,
+        54
+      ],
+      "mode": null
+    },
+    "54": {
+      "symbol": "\n",
+      "goto": [
+        55
+      ],
+      "mode": null
+    },
+    "55": {
+      "symbol": null,
+      "goto": [
+        58
+      ],
+      "mode": null
+    },
+    "56": {
+      "symbol": "=",
+      "goto": [
+        57
+      ],
+      "mode": null
+    },
+    "57": {
+      "symbol": null,
+      "goto": [
+        59
+      ],
+      "mode": null
+    },
+    "58": {
+      "symbol": null,
+      "goto": [
+        60
+      ],
+      "mode": null
+    },
+    "59": {
+      "symbol": null,
+      "goto": [
+        60
+      ],
+      "mode": null
+    },
+    "60": {
+      "symbol": null,
+      "goto": [
+        62
+      ],
+      "mode": null
+    },
+    "61": {
+      "symbol": null,
+      "goto": [
+        63
+      ],
+      "mode": null
+    },
+    "62": {
+      "symbol": null,
+      "goto": [
+        63
+      ],
+      "mode": null
+    },
+    "63": {
+      "symbol": null,
+      "goto": [
+        65
+      ],
+      "mode": null
+    },
+    "64": {
+      "symbol": null,
+      "goto": [
+        66
+      ],
+      "mode": null
+    },
+    "65": {
+      "symbol": null,
+      "goto": [
+        66
+      ],
+      "mode": null
+    },
+    "66": {
+      "symbol": null,
+      "goto": [
+        68
+      ],
+      "mode": null
+    },
+    "67": {
+      "symbol": null,
+      "goto": [
+        69
+      ],
+      "mode": null
+    },
+    "68": {
+      "symbol": null,
+      "goto": [
+        69
+      ],
+      "mode": null
+    },
+    "69": {
+      "symbol": null,
+      "goto": [
+        71
+      ],
+      "mode": null
+    },
+    "70": {
+      "symbol": null,
+      "goto": [
+        72
+      ],
+      "mode": null
+    },
+    "71": {
+      "symbol": null,
+      "goto": [
+        72
+      ],
+      "mode": null
+    },
+    "72": {
+      "symbol": null,
+      "goto": [],
+      "mode": null
+    }
+  },
+  "end_id": 72
+}
