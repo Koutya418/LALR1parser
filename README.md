@@ -1,5 +1,5 @@
 # LALR1parser
-[![Parser Tests](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml/badge.svg)](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml)  
+[![LALR1parser CI](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml/badge.svg)](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml)
 LR(0)からの先読み記号の伝搬によるアルゴリズムで実装したLALR1パーサージェネレーターです。  
 
 ## 背景
@@ -73,7 +73,7 @@ bnf記法に近い記法を採用しています。詳細は以下の通りで�
 ## 制約・注意点
 ### 全体
 - エラー処理に関して未整備の箇所があります。  
-- 正常系でのテストがメインであり、準正常系や異常系のテストは一部しか行っていません。
+- 正常系でのテストがメインです。異常系のテストは現在構文解析、字句解析のテストのみとなっています。
 
 ### 構文解析器
 - Reduce/Reduce衝突に関して解決する機能が未実装な為、テーブル生成が適切に行えないケースがあります。
