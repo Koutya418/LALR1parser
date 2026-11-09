@@ -54,7 +54,7 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file:Path, terms:set = None):
       input_str = file
     case _:
       raise ValueError("Pathかstrで入力してください")
-  toknizer_pattern = ""
+  tokenizer_pattern = ""
   ignore_chars:list = []
   for pattern in result_pattern:
     rule_name = pattern[0]
@@ -66,10 +66,10 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file:Path, terms:set = None):
     if rule_name == "skip":
       ignore_chars = rule_chars
     rule_chars = "|".join(rule_chars)
-    toknizer_pattern += rule_chars
-    toknizer_pattern += "|"
-  toknizer_pattern = toknizer_pattern[:-1]
-  tokens = Lexer.Tokenizer(toknizer_pattern, input_str)
+    tokenizer_pattern += rule_chars
+    tokenizer_pattern += "|"
+  tokenizer_pattern = tokenizer_pattern[:-1]
+  tokens = Lexer.Tokenizer(tokenizer_pattern, input_str)
   result_strings = tokens
 
   tokens = []
@@ -117,7 +117,7 @@ def _parse(tokenizer_path:str, bnf_path:str, file_path:str):
 
 def parse(tokenizer_path:str, bnf_path:str, file_path:str, conflict_print = False) -> SyntaxTreeNode:
   syntax = _parse(bnf_tokenizer_path, syntax_rule_bnf_path, bnf_path)
-  syntax = SyntaxAstGenerator.sytanx_ast_generator(syntax)
+  syntax = SyntaxAstGenerator.syntax_ast_generator(syntax)
   syntax = Syntax(syntax)
   states = States()
   states.LR0_table_gen(syntax)

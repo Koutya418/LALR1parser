@@ -1,13 +1,13 @@
 from .components.common.Data import InputToken
 from .components.common.Nodes import *
 
-def sytanx_ast_generator(node:SyntaxTreeNode) -> AstNode:
+def syntax_ast_generator(node:SyntaxTreeNode) -> AstNode:
   node_symbol = node.node_sym
   result_node_list = []
   for next_node in node.next_nodes:
     result = next_node
     if isinstance(next_node, SyntaxTreeNode):
-      result = sytanx_ast_generator(result)
+      result = syntax_ast_generator(result)
     result_node_list.append(result)
   match node_symbol:
     case "<syntax>":
@@ -63,7 +63,7 @@ def sytanx_ast_generator(node:SyntaxTreeNode) -> AstNode:
         if type(ret) == InputToken:
           ret = ret.char
         elif type(ret) == SyntaxTreeNode:
-          ret = sytanx_ast_generator(ret)
+          ret = syntax_ast_generator(ret)
         elif type(ret) == str:
           ret = ret
         return ret
@@ -80,9 +80,9 @@ def syntax_gen(node):
           result += syntax_gen(node.next_nodes[1])
           return result
         elif len(node.next_nodes) == 1:
-          return [sytanx_ast_generator(node.next_nodes[0])]
+          return [syntax_ast_generator(node.next_nodes[0])]
       case _:
-        return [sytanx_ast_generator(node)]
+        return [syntax_ast_generator(node)]
 
 def rule_list_gen(node):
   result = []
@@ -94,9 +94,9 @@ def rule_list_gen(node):
           result += rule_list_gen(node.next_nodes[2])
           return result
         elif len(node.next_nodes) == 1:
-          return [sytanx_ast_generator(node.next_nodes[0])]
+          return [syntax_ast_generator(node.next_nodes[0])]
       case _:
-        return [sytanx_ast_generator(node)]
+        return [syntax_ast_generator(node)]
 
 def rule_items_gen(node):
   result = []
@@ -108,9 +108,9 @@ def rule_items_gen(node):
           result += rule_items_gen(node.next_nodes[1])
           return result
         elif len(node.next_nodes) == 1:
-          return [sytanx_ast_generator(node.next_nodes[0])]
+          return [syntax_ast_generator(node.next_nodes[0])]
       case _:
-        return [sytanx_ast_generator(node)]
+        return [syntax_ast_generator(node)]
 
 def prec_list_gen(node):
   result = []
@@ -122,6 +122,6 @@ def prec_list_gen(node):
           result += prec_list_gen(node.next_nodes[1])
           return result
         elif len(node.next_nodes) == 1:
-          return [sytanx_ast_generator(node.next_nodes[0])]
+          return [syntax_ast_generator(node.next_nodes[0])]
       case _:
-        return [sytanx_ast_generator(node)]
+        return [syntax_ast_generator(node)]

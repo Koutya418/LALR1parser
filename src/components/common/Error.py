@@ -21,7 +21,7 @@ class ParserParseError(Exception):
           result_string += token
     return f"\n{self.args[0]}\n[{self.row}]{result_string} <-"
 
-class TokenizerTokneizeError(Exception):
+class TokenizerTokenizeError(Exception):
   def __init__(self, message:str, tokens:list, row_count:int, error_index:int):
     self.tokens = tokens
     self.row_count = row_count

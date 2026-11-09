@@ -7,10 +7,10 @@ import sys
 if __name__ == "__main__":
   base_dir = Path(__file__).resolve().parent
   examples_path = base_dir / "examples"
-  clac_path = examples_path / "calc"
-  rule_path = clac_path / "rule.txt"
-  tokenizer_path = clac_path / "tokenizer.txt"
-  file_path = clac_path / "test.txt"
+  calc_path = examples_path / "calc"
+  rule_path = calc_path / "rule.txt"
+  tokenizer_path = calc_path / "tokenizer.txt"
+  file_path = calc_path / "test.txt"
 
   input_str = input("数式を入力してください: ")
   try:
@@ -18,7 +18,7 @@ if __name__ == "__main__":
   except ParserParseError as e:
     print(str(e))
     sys.exit(1)
-  except TokenizerTokneizeError as e:
+  except TokenizerTokenizeError as e:
     print(str(e))
     sys.exit(1)
   except ReduceReduceConflict as e:

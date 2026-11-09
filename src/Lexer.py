@@ -93,7 +93,7 @@ def Tokenizer(pattern:str|Path, input_str:str):
     else:
       count = 0
     if count > 2:
-      raise TokenizerTokneizeError(
+      raise TokenizerTokenizeError(
         "字句解析でエラーが発生しました",
         list(input_str),
         row_count,
