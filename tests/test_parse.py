@@ -1,5 +1,5 @@
 import src.Parser as Parser
-import test.Tools as Tools
+import test_cases.Tools as Tools
 import unittest
 from src.components.common.Error import *
 
@@ -8,7 +8,7 @@ from pathlib import Path
 class Test(unittest.TestCase):
   def test_valid_cases(self):
     base_dir = Path(__file__).resolve().parents[1]
-    test_dir = base_dir / "test" / "valid_case"
+    test_dir = base_dir / "test_cases" / "valid_case"
     for item in test_dir.iterdir():
       if not item.is_dir():
         continue
@@ -34,7 +34,7 @@ class Test(unittest.TestCase):
 
   def test_parse_error_cases(self):
     base_dir = Path(__file__).resolve().parents[1]
-    test_dir = base_dir / "test" / "parse_error"
+    test_dir = base_dir / "test_cases" / "parse_error"
     for item in test_dir.iterdir():
       if not item.is_dir():
         continue

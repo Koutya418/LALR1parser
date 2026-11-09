@@ -1,6 +1,6 @@
 from pathlib import Path
 
-base_dir = Path(__file__).resolve().parent / "test"
+base_dir = Path(__file__).resolve().parent / "test_cases"
 
 
 TOKENIZER = r'''int = "/d/d*"
