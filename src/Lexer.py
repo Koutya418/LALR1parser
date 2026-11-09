@@ -1,9 +1,11 @@
 from .components.common.Syntax import _Syntax
 from .components.common.States import States
 from .components.common.Data import EOF, InputToken
+from .components.common.Error import *
 from .components.Lalr1 import LALR1
 from .components.regex.NFA import NFA
 from .components.regex.AST_Generator import ast_gen
+import copy
 
 from pathlib import Path
 from collections import deque
@@ -74,12 +76,15 @@ def Tokenizer(pattern:str|Path, input_str:str):
   result = []
   input_deque = deque(input_str)
   count = 0
+  row_count = 1
   while len(input_deque) > 0:
     input_chars = "".join(input_deque)
     ret = nfa.reg(input_chars)
     result.append("".join(ret.accepts))
     consume_flag = True
     for sym in ret.accepts:
+      if sym == "\n":
+        row_count += 1
       if sym == input_deque[0]:
         input_deque.popleft()
         consume_flag = False
@@ -88,5 +93,10 @@ def Tokenizer(pattern:str|Path, input_str:str):
     else:
       count = 0
     if count > 2:
-      return -1
+      raise TokenizerTokneizeError(
+        "字句解析でエラーが発生しました",
+        list(input_str),
+        row_count,
+        len(input_str) - len(input_deque)
+      )
   return result
