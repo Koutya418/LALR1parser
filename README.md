@@ -8,6 +8,14 @@ LR(0)からの先読み記号の伝搬によるアルゴリズムで実装した
 
 ## 使用方法
 src/Parser.pyにあるparse関数にトークナイザーの規則、生成規則、解析したいファイルのパスを渡すと構文解析が行えます。
+import src.Parser as Parser  
+
+result = Parser.parse(tokenizer_path, rule_path, file_path)  
+上記の各引数はpathlibのPathになります。
+
+## サンプル
+example.pyを実行すると数式の入力が求められる為、入力すると四則演算の構文解析が行えます。
+また1++2や1+aの様な式を入力した場合、エラーと発生箇所の表示が返されます。
 
 ## 生成規則の記述について
 bnf記法に近い記法を採用しています。詳細は以下の通りです。
