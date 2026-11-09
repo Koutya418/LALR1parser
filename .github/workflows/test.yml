@@ -1,0 +1,24 @@
+name: Python Unit Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリを取得
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # Python環境を構築
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      # unittestを実行
+      - name: Run tests
+        run: python -m unittest -v parse_test
