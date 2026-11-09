@@ -245,6 +245,8 @@ class Syntax(_Syntax):
               associativity = "left"
             case "%right":
               associativity = "right"
+            case "%nonassoc":
+              associativity = "nonassoc"
           for symbol in rules.symbols:
             if symbol in result_term_precedences:
               raise ValueError

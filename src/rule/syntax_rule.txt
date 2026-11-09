@@ -25,7 +25,8 @@ S ::= <syntax>;
               | <token>;
 
 <prec> ::= "%left" <prec_list>
-          | "%right" <prec_list>;
+          | "%right" <prec_list>
+          | "%nonassoc" <prec_list>;
 
 <prec_list> ::= <prec_list> <prec_token>
               | <prec_token>;

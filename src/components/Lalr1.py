@@ -129,7 +129,7 @@ class LALR1:
             reason
           )
         add_conflict_data.show()
-        self.conflict_data.append()
+        self.conflict_data.append(add_conflict_data)
         return
       associativity = associativity.get("associativity")
       match associativity:
@@ -140,7 +140,20 @@ class LALR1:
           reason = "右結合が指定されている"
           pass
         case "nonassoc":
-          raise ValueError
+          reason = "nonassocが指定されている"
+          conflict = ConflictData(
+            state, 
+            symbol, 
+            shift_table.get("value"), 
+            shift_precedence, 
+            reduce_table.get("value"), 
+            reduce_precedence, 
+            True, 
+            add_table.get("action"), 
+            reason
+          )
+          conflict.show(self.syntax)
+          raise SyntaxError("nonassocが指定されています")
     self.conflict_data.append(
       ConflictData(
           state, 

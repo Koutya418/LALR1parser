@@ -163,38 +163,38 @@
       }
     ],
     "symbols": [
-      "<atom>",
-      "<concatenation>",
-      "<literal>",
-      "<repetition>",
-      "S",
-      "<quantifier>",
-      "<regex>",
-      "|",
-      "<alternation>",
-      ".",
-      "!",
-      "(",
       ",",
       "+",
-      "<ordinary_character>",
-      "*",
-      "<group>",
+      "<regex>",
+      "<atom>",
       ")",
+      "*",
+      "(",
+      "<alternation>",
+      "<repetition>",
+      "!",
+      "<ordinary_character>",
+      ".",
+      "<group>",
+      "<literal>",
+      "<concatenation>",
+      "?",
+      "S",
       "<match_option>",
-      "?"
+      "|",
+      "<quantifier>"
     ],
     "nonterm_symbols": [
       "<atom>",
-      "<group>",
-      "<regex>",
-      "<match_option>",
-      "<concatenation>",
-      "<literal>",
-      "<repetition>",
-      "S",
       "<alternation>",
-      "<quantifier>"
+      "<repetition>",
+      "<regex>",
+      "S",
+      "<quantifier>",
+      "<match_option>",
+      "<group>",
+      "<literal>",
+      "<concatenation>"
     ],
     "nonterm_to_rule": [
       {
@@ -272,51 +272,9 @@
     ],
     "first_set": [
       {
-        "symbol": "*",
-        "symbol_set": [
-          "*"
-        ]
-      },
-      {
-        "symbol": ".",
-        "symbol_set": [
-          "."
-        ]
-      },
-      {
-        "symbol": "!",
-        "symbol_set": [
-          "!"
-        ]
-      },
-      {
-        "symbol": "(",
-        "symbol_set": [
-          "("
-        ]
-      },
-      {
         "symbol": ",",
         "symbol_set": [
           ","
-        ]
-      },
-      {
-        "symbol": ")",
-        "symbol_set": [
-          ")"
-        ]
-      },
-      {
-        "symbol": "|",
-        "symbol_set": [
-          "|"
-        ]
-      },
-      {
-        "symbol": "?",
-        "symbol_set": [
-          "?"
         ]
       },
       {
@@ -326,38 +284,80 @@
         ]
       },
       {
+        "symbol": "*",
+        "symbol_set": [
+          "*"
+        ]
+      },
+      {
+        "symbol": "?",
+        "symbol_set": [
+          "?"
+        ]
+      },
+      {
+        "symbol": "(",
+        "symbol_set": [
+          "("
+        ]
+      },
+      {
+        "symbol": ")",
+        "symbol_set": [
+          ")"
+        ]
+      },
+      {
+        "symbol": "!",
+        "symbol_set": [
+          "!"
+        ]
+      },
+      {
         "symbol": "<ordinary_character>",
         "symbol_set": [
           "<ordinary_character>"
         ]
       },
       {
-        "symbol": "<quantifier>",
+        "symbol": ".",
         "symbol_set": [
-          "*",
-          "+",
-          "?"
+          "."
+        ]
+      },
+      {
+        "symbol": "|",
+        "symbol_set": [
+          "|"
         ]
       },
       {
         "symbol": "<atom>",
         "symbol_set": [
-          ".",
-          "<ordinary_character>",
           "(",
-          ","
+          ",",
+          "<ordinary_character>",
+          "."
         ]
       },
       {
-        "symbol": "<match_option>",
+        "symbol": "<quantifier>",
         "symbol_set": [
-          "!"
+          "+",
+          "*",
+          "?"
         ]
       },
       {
         "symbol": "<group>",
         "symbol_set": [
           "("
+        ]
+      },
+      {
+        "symbol": "<match_option>",
+        "symbol_set": [
+          "!"
         ]
       },
       {
@@ -369,46 +369,46 @@
       {
         "symbol": "<repetition>",
         "symbol_set": [
-          ".",
-          "(",
           ",",
-          "<ordinary_character>"
+          "<ordinary_character>",
+          ".",
+          "("
         ]
       },
       {
         "symbol": "<concatenation>",
         "symbol_set": [
-          ".",
-          "(",
           ",",
-          "<ordinary_character>"
+          "(",
+          "<ordinary_character>",
+          "."
         ]
       },
       {
         "symbol": "<alternation>",
         "symbol_set": [
-          ".",
           "(",
           ",",
-          "<ordinary_character>"
+          "<ordinary_character>",
+          "."
         ]
       },
       {
         "symbol": "<regex>",
         "symbol_set": [
-          ".",
-          "<ordinary_character>",
           "(",
-          ","
+          ",",
+          "<ordinary_character>",
+          "."
         ]
       },
       {
         "symbol": "S",
         "symbol_set": [
-          ".",
-          "<ordinary_character>",
           "(",
-          ","
+          ",",
+          "<ordinary_character>",
+          "."
         ]
       },
       {
@@ -565,13 +565,13 @@
             "rule_id": 8,
             "dot": 0,
             "la": [
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "<ordinary_character>",
               "|"
             ]
           },
@@ -579,13 +579,13 @@
             "rule_id": 6,
             "dot": 0,
             "la": [
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "<ordinary_character>",
               "|"
             ]
           },
@@ -593,13 +593,13 @@
             "rule_id": 7,
             "dot": 0,
             "la": [
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "<ordinary_character>",
               "|"
             ]
           },
@@ -607,102 +607,102 @@
             "rule_id": 16,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 13,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 14,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 15,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 17,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 18,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -750,10 +750,10 @@
             "rule_id": 1,
             "dot": 1,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           }
         ]
@@ -784,20 +784,20 @@
             "rule_id": 3,
             "dot": 1,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           },
           {
             "rule_id": 2,
             "dot": 1,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           }
         ]
@@ -872,10 +872,10 @@
             "rule_id": 4,
             "dot": 1,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              ")",
               "|"
             ]
           },
@@ -883,10 +883,10 @@
             "rule_id": 5,
             "dot": 1,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              ")",
               "|"
             ]
           },
@@ -894,36 +894,36 @@
             "rule_id": 4,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              "|",
-              ")"
+              "|"
             ]
           },
           {
             "rule_id": 5,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              "|",
-              ")"
+              "|"
             ]
           },
           {
             "rule_id": 8,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -931,14 +931,14 @@
             "rule_id": 6,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -946,14 +946,14 @@
             "rule_id": 7,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -961,108 +961,108 @@
             "rule_id": 16,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 13,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 14,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 15,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 17,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 18,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1113,93 +1113,93 @@
             "rule_id": 6,
             "dot": 1,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 7,
             "dot": 1,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 8,
             "dot": 1,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 9,
             "dot": 0,
             "la": [
-              ".",
-              {
-                "__type__": "EOF"
-              },
-              "(",
-              "!",
+              ")",
               ",",
               "<ordinary_character>",
+              "!",
+              ".",
+              "(",
               "|",
-              ")"
+              {
+                "__type__": "EOF"
+              }
             ]
           },
           {
             "rule_id": 10,
             "dot": 0,
             "la": [
-              ".",
-              {
-                "__type__": "EOF"
-              },
-              "(",
-              "!",
+              ")",
               ",",
               "<ordinary_character>",
+              "!",
+              ".",
+              "(",
               "|",
-              ")"
+              {
+                "__type__": "EOF"
+              }
             ]
           },
           {
             "rule_id": 11,
             "dot": 0,
             "la": [
-              ".",
-              {
-                "__type__": "EOF"
-              },
-              "(",
-              "!",
+              ")",
               ",",
               "<ordinary_character>",
+              "!",
+              ".",
+              "(",
               "|",
-              ")"
+              {
+                "__type__": "EOF"
+              }
             ]
           }
         ]
@@ -1222,18 +1222,18 @@
             "rule_id": 16,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1256,18 +1256,18 @@
             "rule_id": 13,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1290,18 +1290,18 @@
             "rule_id": 14,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1324,18 +1324,18 @@
             "rule_id": 15,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1414,18 +1414,18 @@
             "rule_id": 17,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
@@ -1453,27 +1453,27 @@
             "rule_id": 4,
             "dot": 0,
             "la": [
-              "|",
-              ")"
+              ")",
+              "|"
             ]
           },
           {
             "rule_id": 5,
             "dot": 0,
             "la": [
-              "|",
-              ")"
+              ")",
+              "|"
             ]
           },
           {
             "rule_id": 8,
             "dot": 0,
             "la": [
+              ")",
+              ",",
+              "<ordinary_character>",
               ".",
               "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1481,11 +1481,11 @@
             "rule_id": 6,
             "dot": 0,
             "la": [
+              ")",
+              ",",
+              "<ordinary_character>",
               ".",
               "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1493,11 +1493,11 @@
             "rule_id": 7,
             "dot": 0,
             "la": [
+              ")",
+              ",",
+              "<ordinary_character>",
               ".",
               "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1505,90 +1505,90 @@
             "rule_id": 16,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           },
           {
             "rule_id": 13,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           },
           {
             "rule_id": 14,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           },
           {
             "rule_id": 15,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           },
           {
             "rule_id": 17,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           },
           {
             "rule_id": 18,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
               ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "<ordinary_character>",
+              ".",
+              "|"
             ]
           }
         ]
@@ -1611,18 +1611,18 @@
             "rule_id": 18,
             "dot": 1,
             "la": [
+              ",",
+              "+",
               "*",
-              ".",
+              "?",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1697,66 +1697,66 @@
             "rule_id": 3,
             "dot": 2,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           },
           {
             "rule_id": 2,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           },
           {
             "rule_id": 3,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           },
           {
             "rule_id": 4,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              "|",
-              ")"
+              "|"
             ]
           },
           {
             "rule_id": 5,
             "dot": 0,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              "|",
-              ")"
+              "|"
             ]
           },
           {
             "rule_id": 8,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1764,14 +1764,14 @@
             "rule_id": 6,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1779,14 +1779,14 @@
             "rule_id": 7,
             "dot": 0,
             "la": [
+              ")",
+              "(",
+              ",",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              "<ordinary_character>",
-              ",",
               "|"
             ]
           },
@@ -1794,108 +1794,108 @@
             "rule_id": 16,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 13,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 14,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 15,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 17,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 18,
             "dot": 0,
             "la": [
+              ",",
+              "+",
               "*",
+              "?",
+              "(",
+              ")",
+              "<ordinary_character>",
               ".",
               {
                 "__type__": "EOF"
               },
-              "(",
-              ")",
-              ",",
-              "|",
-              "?",
-              "+",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -1918,10 +1918,10 @@
             "rule_id": 5,
             "dot": 2,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
               },
-              ")",
               "|"
             ]
           }
@@ -1957,45 +1957,45 @@
             "rule_id": 8,
             "dot": 2,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 7,
             "dot": 2,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           },
           {
             "rule_id": 12,
             "dot": 0,
             "la": [
-              ".",
-              {
-                "__type__": "EOF"
-              },
-              "(",
+              ")",
               ",",
               "<ordinary_character>",
+              ".",
+              "(",
               "|",
-              ")"
+              {
+                "__type__": "EOF"
+              }
             ]
           }
         ]
@@ -2018,16 +2018,16 @@
             "rule_id": 9,
             "dot": 1,
             "la": [
-              ".",
-              "!",
+              ",",
               "(",
+              ")",
+              "!",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -2050,16 +2050,16 @@
             "rule_id": 10,
             "dot": 1,
             "la": [
-              ".",
-              "!",
+              ",",
               "(",
+              ")",
+              "!",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -2082,16 +2082,16 @@
             "rule_id": 11,
             "dot": 1,
             "la": [
-              ".",
-              "!",
+              ",",
               "(",
+              ")",
+              "!",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -2114,18 +2114,18 @@
             "rule_id": 17,
             "dot": 2,
             "la": [
-              ".",
-              "(",
               ",",
               "+",
-              "<ordinary_character>",
               "*",
+              "(",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
+              "?",
               ")",
-              "|",
-              "?"
+              "|"
             ]
           }
         ]
@@ -2148,10 +2148,10 @@
             "rule_id": 3,
             "dot": 3,
             "la": [
+              ")",
               {
                 "__type__": "EOF"
-              },
-              ")"
+              }
             ]
           }
         ]
@@ -2174,15 +2174,15 @@
             "rule_id": 8,
             "dot": 3,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -2205,15 +2205,15 @@
             "rule_id": 12,
             "dot": 1,
             "la": [
-              ".",
+              ",",
               "(",
+              ")",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
-              ",",
-              ")",
-              "|",
-              "<ordinary_character>"
+              "|"
             ]
           }
         ]
@@ -2236,18 +2236,18 @@
             "rule_id": 17,
             "dot": 3,
             "la": [
-              ".",
-              "(",
               ",",
               "+",
-              "<ordinary_character>",
               "*",
+              "(",
+              "<ordinary_character>",
+              ".",
               {
                 "__type__": "EOF"
               },
+              "?",
               ")",
-              "|",
-              "?"
+              "|"
             ]
           }
         ]
@@ -2468,11 +2468,11 @@
       }
     },
     "2": {
-      "__class__:EOF": {
+      ")": {
         "action": "reduce",
         "value": 1
       },
-      ")": {
+      "__class__:EOF": {
         "action": "reduce",
         "value": 1
       }
@@ -2482,21 +2482,21 @@
         "action": "shift",
         "value": 12
       },
-      "__class__:EOF": {
+      ")": {
         "action": "reduce",
         "value": 2
       },
-      ")": {
+      "__class__:EOF": {
         "action": "reduce",
         "value": 2
       }
     },
     "4": {
-      "__class__:EOF": {
+      ")": {
         "action": "reduce",
         "value": 4
       },
-      ")": {
+      "__class__:EOF": {
         "action": "reduce",
         "value": 4
       },
@@ -2542,7 +2542,7 @@
       }
     },
     "5": {
-      ".": {
+      ",": {
         "action": "reduce",
         "value": 6
       },
@@ -2550,23 +2550,23 @@
         "action": "reduce",
         "value": 6
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 6
-      },
-      ",": {
-        "action": "reduce",
-        "value": 6
-      },
       ")": {
         "action": "reduce",
         "value": 6
       },
-      "|": {
+      "<ordinary_character>": {
         "action": "reduce",
         "value": 6
       },
-      "<ordinary_character>": {
+      ".": {
+        "action": "reduce",
+        "value": 6
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 6
+      },
+      "|": {
         "action": "reduce",
         "value": 6
       },
@@ -2588,35 +2588,7 @@
       }
     },
     "6": {
-      "*": {
-        "action": "reduce",
-        "value": 16
-      },
-      ".": {
-        "action": "reduce",
-        "value": 16
-      },
-      "(": {
-        "action": "reduce",
-        "value": 16
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 16
-      },
       ",": {
-        "action": "reduce",
-        "value": 16
-      },
-      ")": {
-        "action": "reduce",
-        "value": 16
-      },
-      "|": {
-        "action": "reduce",
-        "value": 16
-      },
-      "?": {
         "action": "reduce",
         "value": 16
       },
@@ -2624,41 +2596,41 @@
         "action": "reduce",
         "value": 16
       },
+      "*": {
+        "action": "reduce",
+        "value": 16
+      },
+      "?": {
+        "action": "reduce",
+        "value": 16
+      },
+      "(": {
+        "action": "reduce",
+        "value": 16
+      },
+      ")": {
+        "action": "reduce",
+        "value": 16
+      },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 16
+      },
+      ".": {
+        "action": "reduce",
+        "value": 16
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 16
+      },
+      "|": {
         "action": "reduce",
         "value": 16
       }
     },
     "7": {
-      "*": {
-        "action": "reduce",
-        "value": 13
-      },
-      ".": {
-        "action": "reduce",
-        "value": 13
-      },
-      "(": {
-        "action": "reduce",
-        "value": 13
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 13
-      },
       ",": {
-        "action": "reduce",
-        "value": 13
-      },
-      ")": {
-        "action": "reduce",
-        "value": 13
-      },
-      "|": {
-        "action": "reduce",
-        "value": 13
-      },
-      "?": {
         "action": "reduce",
         "value": 13
       },
@@ -2666,41 +2638,41 @@
         "action": "reduce",
         "value": 13
       },
+      "*": {
+        "action": "reduce",
+        "value": 13
+      },
+      "?": {
+        "action": "reduce",
+        "value": 13
+      },
+      "(": {
+        "action": "reduce",
+        "value": 13
+      },
+      ")": {
+        "action": "reduce",
+        "value": 13
+      },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 13
+      },
+      ".": {
+        "action": "reduce",
+        "value": 13
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 13
+      },
+      "|": {
         "action": "reduce",
         "value": 13
       }
     },
     "8": {
-      "*": {
-        "action": "reduce",
-        "value": 14
-      },
-      ".": {
-        "action": "reduce",
-        "value": 14
-      },
-      "(": {
-        "action": "reduce",
-        "value": 14
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 14
-      },
       ",": {
-        "action": "reduce",
-        "value": 14
-      },
-      ")": {
-        "action": "reduce",
-        "value": 14
-      },
-      "|": {
-        "action": "reduce",
-        "value": 14
-      },
-      "?": {
         "action": "reduce",
         "value": 14
       },
@@ -2708,41 +2680,41 @@
         "action": "reduce",
         "value": 14
       },
+      "*": {
+        "action": "reduce",
+        "value": 14
+      },
+      "?": {
+        "action": "reduce",
+        "value": 14
+      },
+      "(": {
+        "action": "reduce",
+        "value": 14
+      },
+      ")": {
+        "action": "reduce",
+        "value": 14
+      },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 14
+      },
+      ".": {
+        "action": "reduce",
+        "value": 14
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 14
+      },
+      "|": {
         "action": "reduce",
         "value": 14
       }
     },
     "9": {
-      "*": {
-        "action": "reduce",
-        "value": 15
-      },
-      ".": {
-        "action": "reduce",
-        "value": 15
-      },
-      "(": {
-        "action": "reduce",
-        "value": 15
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 15
-      },
       ",": {
-        "action": "reduce",
-        "value": 15
-      },
-      ")": {
-        "action": "reduce",
-        "value": 15
-      },
-      "|": {
-        "action": "reduce",
-        "value": 15
-      },
-      "?": {
         "action": "reduce",
         "value": 15
       },
@@ -2750,7 +2722,35 @@
         "action": "reduce",
         "value": 15
       },
+      "*": {
+        "action": "reduce",
+        "value": 15
+      },
+      "?": {
+        "action": "reduce",
+        "value": 15
+      },
+      "(": {
+        "action": "reduce",
+        "value": 15
+      },
+      ")": {
+        "action": "reduce",
+        "value": 15
+      },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 15
+      },
+      ".": {
+        "action": "reduce",
+        "value": 15
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 15
+      },
+      "|": {
         "action": "reduce",
         "value": 15
       }
@@ -2802,35 +2802,7 @@
       }
     },
     "11": {
-      "*": {
-        "action": "reduce",
-        "value": 18
-      },
-      ".": {
-        "action": "reduce",
-        "value": 18
-      },
-      "(": {
-        "action": "reduce",
-        "value": 18
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 18
-      },
       ",": {
-        "action": "reduce",
-        "value": 18
-      },
-      ")": {
-        "action": "reduce",
-        "value": 18
-      },
-      "|": {
-        "action": "reduce",
-        "value": 18
-      },
-      "?": {
         "action": "reduce",
         "value": 18
       },
@@ -2838,7 +2810,35 @@
         "action": "reduce",
         "value": 18
       },
+      "*": {
+        "action": "reduce",
+        "value": 18
+      },
+      "?": {
+        "action": "reduce",
+        "value": 18
+      },
+      "(": {
+        "action": "reduce",
+        "value": 18
+      },
+      ")": {
+        "action": "reduce",
+        "value": 18
+      },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 18
+      },
+      ".": {
+        "action": "reduce",
+        "value": 18
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 18
+      },
+      "|": {
         "action": "reduce",
         "value": 18
       }
@@ -2886,11 +2886,11 @@
       }
     },
     "13": {
-      "__class__:EOF": {
+      ")": {
         "action": "reduce",
         "value": 5
       },
-      ")": {
+      "__class__:EOF": {
         "action": "reduce",
         "value": 5
       },
@@ -2904,7 +2904,7 @@
         "action": "goto",
         "value": 20
       },
-      ".": {
+      ",": {
         "action": "reduce",
         "value": 7
       },
@@ -2912,23 +2912,23 @@
         "action": "reduce",
         "value": 7
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 7
-      },
-      ",": {
-        "action": "reduce",
-        "value": 7
-      },
       ")": {
         "action": "reduce",
         "value": 7
       },
-      "|": {
+      "<ordinary_character>": {
         "action": "reduce",
         "value": 7
       },
-      "<ordinary_character>": {
+      ".": {
+        "action": "reduce",
+        "value": 7
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 7
+      },
+      "|": {
         "action": "reduce",
         "value": 7
       },
@@ -2938,11 +2938,7 @@
       }
     },
     "15": {
-      ".": {
-        "action": "reduce",
-        "value": 9
-      },
-      "!": {
+      ",": {
         "action": "reduce",
         "value": 9
       },
@@ -2950,33 +2946,33 @@
         "action": "reduce",
         "value": 9
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 9
-      },
-      ",": {
-        "action": "reduce",
-        "value": 9
-      },
       ")": {
         "action": "reduce",
         "value": 9
       },
-      "|": {
+      "!": {
         "action": "reduce",
         "value": 9
       },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 9
+      },
+      ".": {
+        "action": "reduce",
+        "value": 9
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 9
+      },
+      "|": {
         "action": "reduce",
         "value": 9
       }
     },
     "16": {
-      ".": {
-        "action": "reduce",
-        "value": 10
-      },
-      "!": {
+      ",": {
         "action": "reduce",
         "value": 10
       },
@@ -2984,33 +2980,33 @@
         "action": "reduce",
         "value": 10
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 10
-      },
-      ",": {
-        "action": "reduce",
-        "value": 10
-      },
       ")": {
         "action": "reduce",
         "value": 10
       },
-      "|": {
+      "!": {
         "action": "reduce",
         "value": 10
       },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 10
+      },
+      ".": {
+        "action": "reduce",
+        "value": 10
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 10
+      },
+      "|": {
         "action": "reduce",
         "value": 10
       }
     },
     "17": {
-      ".": {
-        "action": "reduce",
-        "value": 11
-      },
-      "!": {
+      ",": {
         "action": "reduce",
         "value": 11
       },
@@ -3018,23 +3014,27 @@
         "action": "reduce",
         "value": 11
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 11
-      },
-      ",": {
-        "action": "reduce",
-        "value": 11
-      },
       ")": {
         "action": "reduce",
         "value": 11
       },
-      "|": {
+      "!": {
         "action": "reduce",
         "value": 11
       },
       "<ordinary_character>": {
+        "action": "reduce",
+        "value": 11
+      },
+      ".": {
+        "action": "reduce",
+        "value": 11
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 11
+      },
+      "|": {
         "action": "reduce",
         "value": 11
       }
@@ -3046,17 +3046,17 @@
       }
     },
     "19": {
-      "__class__:EOF": {
+      ")": {
         "action": "reduce",
         "value": 3
       },
-      ")": {
+      "__class__:EOF": {
         "action": "reduce",
         "value": 3
       }
     },
     "20": {
-      ".": {
+      ",": {
         "action": "reduce",
         "value": 8
       },
@@ -3064,41 +3064,33 @@
         "action": "reduce",
         "value": 8
       },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 8
-      },
-      ",": {
-        "action": "reduce",
-        "value": 8
-      },
       ")": {
         "action": "reduce",
         "value": 8
       },
-      "|": {
+      "<ordinary_character>": {
         "action": "reduce",
         "value": 8
       },
-      "<ordinary_character>": {
+      ".": {
+        "action": "reduce",
+        "value": 8
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 8
+      },
+      "|": {
         "action": "reduce",
         "value": 8
       }
     },
     "21": {
-      ".": {
+      ",": {
         "action": "reduce",
         "value": 12
       },
       "(": {
-        "action": "reduce",
-        "value": 12
-      },
-      "__class__:EOF": {
-        "action": "reduce",
-        "value": 12
-      },
-      ",": {
         "action": "reduce",
         "value": 12
       },
@@ -3106,24 +3098,24 @@
         "action": "reduce",
         "value": 12
       },
-      "|": {
+      "<ordinary_character>": {
         "action": "reduce",
         "value": 12
       },
-      "<ordinary_character>": {
+      ".": {
+        "action": "reduce",
+        "value": 12
+      },
+      "__class__:EOF": {
+        "action": "reduce",
+        "value": 12
+      },
+      "|": {
         "action": "reduce",
         "value": 12
       }
     },
     "22": {
-      ".": {
-        "action": "reduce",
-        "value": 17
-      },
-      "(": {
-        "action": "reduce",
-        "value": 17
-      },
       ",": {
         "action": "reduce",
         "value": 17
@@ -3132,15 +3124,27 @@
         "action": "reduce",
         "value": 17
       },
-      "<ordinary_character>": {
-        "action": "reduce",
-        "value": 17
-      },
       "*": {
         "action": "reduce",
         "value": 17
       },
+      "(": {
+        "action": "reduce",
+        "value": 17
+      },
+      "<ordinary_character>": {
+        "action": "reduce",
+        "value": 17
+      },
+      ".": {
+        "action": "reduce",
+        "value": 17
+      },
       "__class__:EOF": {
+        "action": "reduce",
+        "value": 17
+      },
+      "?": {
         "action": "reduce",
         "value": 17
       },
@@ -3149,10 +3153,6 @@
         "value": 17
       },
       "|": {
-        "action": "reduce",
-        "value": 17
-      },
-      "?": {
         "action": "reduce",
         "value": 17
       }
