@@ -4,7 +4,8 @@ from .common.Data import LR0Item, State, EOF, InputToken
 from .common.Nodes import SyntaxTreeNode
 from collections import deque
 from pathlib import Path
-import pprint
+from .common.Error import *
+import copy
 import json
 
 class LALR1:
@@ -117,11 +118,32 @@ class LALR1:
     stack = [0]
     node_stack = []
     result = []
+    row_count = 1
+    row_start = 0
     while len(input_deque) > 0:
+      ignore_flag = True
+      while ignore_flag:
+        if isinstance(input_deque[0], InputToken):
+          if input_deque[0].char == "\n":
+            row_count += 1
+            row_start = len(input) - len(input_deque) + 1
+          if input_deque[0].token_type == "skip":
+            input_deque.popleft()
+          else:
+            ignore_flag = False
+        else:
+          ignore_flag = False
       input_token = input_deque[0]
-      if type(input_token) == InputToken:
+      if isinstance(input_token, InputToken):
         input_token = input_token.token_type
-      action_data = self.table[stack[-1]][input_token]
+      action_data = self.table.get(stack[-1]).get(input_token)
+      if action_data is None:
+        raise ParserParseError(
+          "解析エラーが発生しました",
+          copy.deepcopy(input),
+          row_count,
+          row_start
+        )
       action = action_data.get("action")
       value = action_data.get("value")
       match action:

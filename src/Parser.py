@@ -43,6 +43,7 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
         old_token = None
         rule = []
 
+  eol_rule = ""
   result_strings = []
   with file_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
@@ -54,6 +55,7 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
       for i, char in enumerate(rule_chars):
         if char == "\\n":
           rule_chars[i] = "\n"
+          eol_rule = rule_name
       if rule_name == "skip":
         ignore_chars = rule_chars
       rule_chars = "|".join(rule_chars)
@@ -61,13 +63,16 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
       toknizer_pattern += "|"
     toknizer_pattern = toknizer_pattern[:-1]
     tokens = Lexer.Tokenizer(toknizer_pattern, input_str)
-    result_strings = [token for token in tokens if token not in ignore_chars]
+    result_strings = tokens
 
   tokens = []
   NFAs:list[tuple[str, NFA]] = []
   for pattern in result_pattern:
     NFAs.append([pattern[0], Lexer.NFA_gen(pattern[1])])
   for string in result_strings:
+    if string == "\n":
+      tokens.append([eol_rule, string])
+      continue
     for nfa in NFAs:
       result:Regex_ret = nfa[1].reg(string)
       if result.accepts == string:
