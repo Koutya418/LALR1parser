@@ -3,10 +3,12 @@ from collections import deque
 from .Syntax import Syntax
 
 class ParserParseError(Exception):
-  def __init__(self, message:str, tokens:list, row:int, start_index:int):
+  def __init__(self, message:str, tokens:list, row:int, start_index:int, conflict_data = None, nonassoc_flag = False):
     self.start_index = start_index
     self.row = row
     self.tokens = tokens
+    self.conflict_data = conflict_data
+    self.nonassoc_flag = nonassoc_flag
     super().__init__(message)
 
   def __str__(self):
@@ -19,7 +21,10 @@ class ParserParseError(Exception):
           result_string += token.char
         case str():
           result_string += token
-    return f"\n{self.args[0]}\n[{self.row}]{result_string} <-"
+    conflict_data = ""
+    if self.nonassoc_flag:
+      conflict_data = f"\n{self.conflict_data}"
+    return f"\n{self.args[0]}\n[{self.row}]{result_string} <-{conflict_data}"
 
 class TokenizerTokenizeError(Exception):
   def __init__(self, message:str, tokens:list, row_count:int, error_index:int):

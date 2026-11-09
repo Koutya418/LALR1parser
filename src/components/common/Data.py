@@ -21,6 +21,10 @@ class Rule:
   re: tuple[str, ...]
   prec: int|dict|None = None
 
+@dataclass
+class Nonassoc:
+  pass
+
 @dataclass(frozen=True)
 class LR0Item:
   rule_id:int
@@ -93,6 +97,26 @@ Resolution:
   reason: {self.reason}
 '''
     )
+
+  def data_to_str(self, syntax:Syntax):
+    reduce_rule_string = syntax.rule_to_string(self.reduce_rule)
+    return       f'''
+stateid: {self.state_id}
+lookahead: {self.la_symbol}
+
+Shift:
+  next state: {self.shift_next_state}
+  precedence: {self.shift_precedence}
+
+Reduce:
+  {reduce_rule_string}
+  precedence: {self.reduce_precedence}
+
+Resolution:
+  resolved: {self.resolved}
+  select action: {self.selected_action}
+  reason: {self.reason}
+'''
 
 class State:
   def __init__(self, core:frozenset[LR0Item]):

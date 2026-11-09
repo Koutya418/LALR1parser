@@ -1,6 +1,6 @@
 from .common.Syntax import _Syntax, Syntax
 from .common.States import States
-from .common.Data import LR0Item, State, EOF, InputToken, ConflictData
+from .common.Data import LR0Item, State, EOF, InputToken, ConflictData, Nonassoc
 from .common.Nodes import SyntaxTreeNode
 from collections import deque
 from pathlib import Path
@@ -141,7 +141,7 @@ class LALR1:
           pass
         case "nonassoc":
           reason = "nonassocが指定されている"
-          conflict = ConflictData(
+          conflict_data = ConflictData(
             state, 
             symbol, 
             shift_table.get("value"), 
@@ -152,8 +152,8 @@ class LALR1:
             add_table.get("action"), 
             reason
           )
-          conflict.show(self.syntax)
-          raise SyntaxError("nonassocが指定されています")
+          self.conflict_data.append(conflict_data)
+          add_table = {"action":Nonassoc, "value":conflict_data}
     self.conflict_data.append(
       ConflictData(
           state, 
@@ -203,6 +203,16 @@ class LALR1:
         )
       action = action_data.get("action")
       value = action_data.get("value")
+      if action == Nonassoc:
+        if isinstance(value, ConflictData):
+          raise ParserParseError(
+            "構文解析でエラーが発生しました",
+            copy.deepcopy(input),
+            row_count,
+            row_start,
+            value.data_to_str(self.syntax),
+            True
+          )
       match action:
         case "shift":
           node = input_deque.popleft()
