@@ -92,14 +92,11 @@ def Tokenizer(pattern:str|Path, input_str:str):
       count += 1
     else:
       count = 0
-    try:
-      if count > 2:
-        raise TokenizerTokneizeError(
-          "字句解析でエラーが発生しました",
-          list(input_str),
-          row_count,
-          len(input_str) - len(input_deque)
-        )
-    except TokenizerTokneizeError as e:
-      raise SystemExit(str(e))
+    if count > 2:
+      raise TokenizerTokneizeError(
+        "字句解析でエラーが発生しました",
+        list(input_str),
+        row_count,
+        len(input_str) - len(input_deque)
+      )
   return result
