@@ -5,7 +5,7 @@ from test_cases.Tools import *
 if __name__ == "__main__":
   base_dir = Path(__file__).resolve().parent
   examples_path = base_dir / "examples"
-  clac_path = examples_path / "clac"
+  clac_path = examples_path / "calc"
   rule_path = clac_path / "rule.txt"
   tokenizer_path = clac_path / "tokenizer.txt"
   file_path = clac_path / "test.txt"
