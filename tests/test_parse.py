@@ -1,5 +1,5 @@
 import src.Parser as Parser
-import test_cases.Tools as Tools
+import tools.Tools as Tools
 import unittest
 from src.components.common.Error import *
 

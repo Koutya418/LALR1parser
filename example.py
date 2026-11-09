@@ -1,6 +1,6 @@
 from pathlib import Path
 import src.Parser as Parser
-from test_cases.Tools import *
+from tools.Tools import *
 
 if __name__ == "__main__":
   base_dir = Path(__file__).resolve().parent
