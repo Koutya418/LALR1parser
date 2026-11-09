@@ -76,7 +76,14 @@ class States:
     return self.states[state_id].lr0_closure(syntax)
 
   def LR0_table_gen(self, syntax:Syntax):
-    state_id = self.add_state(frozenset([LR0Item(0, 0)]))
+    start_rules = syntax.get_nonterm_to_rule_id("S'")
+    start_core = set()
+    if start_rules is not None:
+      for rule_id in start_rules:
+        start_core.add(LR0Item(rule_id, 0))
+    else:
+      start_core.add(LR0Item(0, 0))
+    state_id = self.add_state(frozenset(start_core))
     worklist:deque = deque([state_id])
     while len(worklist) > 0:
       state = worklist.popleft()
@@ -89,7 +96,13 @@ class States:
   def lalr1_gen(self, syntax:Syntax):
     propagation_link:dict[int, dict[LR0Item, dict[int, set[LR0Item]]]] = {}
     spontaneous_la: dict[int, dict[LR0Item, set]] = {}
-    start_item = LR0Item(0, 0)
+    start_items = set()
+    start_rules = syntax.get_nonterm_to_rule_id("S'")
+    if start_rules is not None:
+      for rule_id in start_rules:
+        start_items.add(LR0Item(rule_id, 0))
+    else:
+      start_items.add(LR0Item(0, 0))
     for i in range(len(self.states)):
       propagation_link[i] = {}
       self.states[i].la_init()
@@ -125,7 +138,7 @@ class States:
         if i in spontaneous_la:
           if core_item in spontaneous_la[i]:
             state.la_add(core_item, spontaneous_la[i][core_item])
-        if core_item == start_item:
+        if core_item in start_items:
           state.la_add(core_item, set([EOF]))
     sources = []
     for source_state_id, source_dict in propagation_link.items():

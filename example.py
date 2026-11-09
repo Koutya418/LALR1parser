@@ -21,6 +21,9 @@ if __name__ == "__main__":
   except TokenizerTokneizeError as e:
     print(str(e))
     sys.exit(1)
+  except ReduceReduceConflict as e:
+    print(str(e))
+    sys.exit(1)
   result = AST_gen(result)
   result = AST_to_String(result)
   print(result)

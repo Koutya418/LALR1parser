@@ -58,6 +58,42 @@ class LR0Item:
     rule = syntax.get_rule(self.rule_id)
     print(f"{front}[{self.rule_id}] {rule.le} -> {"".join(rule.re[:self.dot])}・{"".join(rule.re[self.dot:])}")
 
+@dataclass
+class ConflictData:
+  state_id:int
+  la_symbol:str|EOF|Propagation_symbol
+
+  shift_next_state:int
+  shift_precedence:int
+  reduce_rule:int
+  reduce_precedence:int
+
+  resolved:bool
+  selected_action:str
+  reason:str
+
+  def show(self, syntax:Syntax):
+    reduce_rule_string = syntax.rule_to_string(self.reduce_rule)
+    print(
+      f'''
+stateid: {self.state_id}
+lookahead: {self.la_symbol}
+
+Shift:
+  next state: {self.shift_next_state}
+  precedence: {self.shift_precedence}
+
+Reduce:
+  {reduce_rule_string}
+  precedence: {self.reduce_precedence}
+
+Resolution:
+  resolved: {self.resolved}
+  select action: {self.selected_action}
+  reason: {self.reason}
+'''
+    )
+
 class State:
   def __init__(self, core:frozenset[LR0Item]):
     self.core:frozenset[LR0Item] = core

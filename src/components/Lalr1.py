@@ -1,6 +1,6 @@
 from .common.Syntax import _Syntax, Syntax
 from .common.States import States
-from .common.Data import LR0Item, State, EOF, InputToken
+from .common.Data import LR0Item, State, EOF, InputToken, ConflictData
 from .common.Nodes import SyntaxTreeNode
 from collections import deque
 from pathlib import Path
@@ -9,31 +9,37 @@ import copy
 import json
 
 class LALR1:
-  def __init__(self, syntax:_Syntax|Syntax, states:States, table_json_path:Path = None, debug:bool = False):
+  def __init__(self, syntax:_Syntax|Syntax, states:States, table_json_path:Path = None):
     self.syntax = syntax
     self.states = states
+    self.conflict_data:list[ConflictData] = []
     self.table:dict[int, dict[str, dict[str, str]]] = {}
     if table_json_path is None:
-      self.lalr1_table_gen(debug)
+      self.lalr1_table_gen()
     else:
       self.json_table_load(table_json_path)
-
-  def lalr1_table_gen(self, debug):
-    end_item = LR0Item(0, len(self.syntax.get_rule(0).re))
+  def lalr1_table_gen(self):
+    end_items = set()
+    end_item_rules = self.syntax.get_nonterm_to_rule_id("S'")
+    if end_item_rules is not None:
+      for rule_id in end_item_rules:
+        end_items.add(LR0Item(rule_id, len(self.syntax.get_rule(rule_id).re)))
+    else:
+      end_items.add(LR0Item(0, len(self.syntax.get_rule(0).re)))
     for i in range(len(self.states.states)):
       state:State = self.states.states[i]
       next_state_cores, _, _ = state.lr1_closure(self.syntax)
       self.table[i] = {}
       for item in state.items:
         next_symbol = item.next_symbol(self.syntax)
-        if item == end_item:
+        if item in end_items:
           self.table[i][EOF] = {"action":"accept", "value":"accept"}
           continue
         if next_symbol is None:
           add_table = {"action":"reduce", "value":item.rule_id}
           for symbol in state.la[item]:
             if symbol in self.table[i]:
-              self.shift_reduce_conflict_solver(i, symbol, add_table, self.table[i][symbol])
+              self.conflict_solver(i, symbol, add_table, self.table[i][symbol])
               continue
             self.table[i][symbol] = add_table
           continue
@@ -47,7 +53,7 @@ class LALR1:
           action = "goto"
         add_table = {"action":action, "value": value}
         if next_symbol in self.table[i]:
-          self.shift_reduce_conflict_solver(i, next_symbol, self.table[i][next_symbol], add_table)
+          self.conflict_solver(i, next_symbol, self.table[i][next_symbol], add_table)
           continue
         self.table[i][next_symbol] = add_table
 
@@ -75,15 +81,22 @@ class LALR1:
             self.table[int(i)][symbol] = action
           
 
-  def shift_reduce_conflict_solver(self, state, symbol, reduce_table:dict, shift_table:dict):
+  def conflict_solver(self, state, symbol, reduce_table:dict, shift_table:dict):
+    reason = ""
     if not isinstance(self.syntax, Syntax):
       return
     if reduce_table == shift_table:
       return
-    #print(f"テーブル生成時に衝突が発生しました{reduce_table}, {shift_table}")
-    if reduce_table.get("action") != "reduce":
-      return
-    if shift_table.get("action") != "shift":
+    if reduce_table.get("action") != "reduce" or shift_table.get("action") != "shift":
+      if shift_table.get("action") == "reduce" and reduce_table.get("action") == "reduce":
+        raise ReduceReduceConflict(
+          "Reduce/Reduce衝突が発生しました",
+          reduce_table,
+          shift_table,
+          symbol,
+          state,
+          self.syntax
+        )
       return
     reduce_precedence:dict = self.syntax.get_rule(int(reduce_table.get("value"))).prec
     shift_precedence:dict = self.syntax.term_precedences.get(symbol)
@@ -95,21 +108,52 @@ class LALR1:
     if shift_precedence is None or reduce_precedence is None:
       pass
     elif shift_precedence > reduce_precedence:
+      reason = "shiftの優先順位が高い"
       pass
     elif shift_precedence < reduce_precedence:
+      reason = "reduceの優先順位が高い"
       add_table = reduce_table
     elif shift_precedence == reduce_precedence:
       associativity = self.syntax.term_precedences.get(symbol)
       if associativity is None:
+        reason = "未解決"
+        add_conflict_data = ConflictData(
+            state, 
+            symbol, 
+            shift_table.get("value"), 
+            shift_precedence, 
+            reduce_table.get("value"), 
+            reduce_precedence, 
+            False, 
+            add_table.get("action"), 
+            reason
+          )
+        add_conflict_data.show()
+        self.conflict_data.append()
         return
       associativity = associativity.get("associativity")
       match associativity:
         case "left":
+          reason = "左結合が指定されている"
           add_table = reduce_table
         case "right":
+          reason = "右結合が指定されている"
           pass
         case "nonassoc":
           raise ValueError
+    self.conflict_data.append(
+      ConflictData(
+          state, 
+          symbol, 
+          shift_table.get("value"), 
+          shift_precedence, 
+          reduce_table.get("value"), 
+          reduce_precedence, 
+          True, 
+          add_table.get("action"), 
+          reason
+        )
+      )
     self.table[state][symbol] = add_table
 
 
@@ -167,33 +211,3 @@ class LALR1:
           if len(node_stack) != 1:
             raise ValueError
           return node_stack[0]
-
-  def tree_gen(self, result:list[int], input:list, result_deque:deque = None, input_deque:deque = None):
-    if result_deque is None:
-      result_deque:deque = deque(result)
-    if input_deque is None:
-      input_deque:deque = deque(input)
-    reduce_rule = self.syntax.get_rule(result_deque.pop())
-    reduce_symbol_type = self.syntax.get_symbol_type(reduce_rule.le)
-    reduce_re = reversed(reduce_rule.re)
-    root_node = SyntaxTreeNode(reduce_symbol_type, reduce_rule.le, [])
-    for symbol in reduce_re:
-      input_token = input_deque[-1]
-      if type(input_token) == InputToken:
-        input_token = input_token.token_type
-      if symbol == input_token:
-        add_item = None
-        add_item_symbol_type = self.syntax.get_symbol_type(symbol)
-        match add_item_symbol_type:
-          case "nonterm":
-            add_item = SyntaxTreeNode(add_item_symbol_type, symbol, [input_deque[-1]])
-          case "term":
-            add_item = symbol
-            if type(input_deque[-1]) == InputToken:
-              add_item = input_deque[-1]
-        root_node.next_nodes.append(add_item)
-        input_deque.pop()
-      else:
-        root_node.next_nodes.append(self.tree_gen(result, input, result_deque, input_deque))
-    root_node.next_nodes.reverse()
-    return root_node

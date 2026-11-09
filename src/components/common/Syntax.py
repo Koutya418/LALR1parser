@@ -197,6 +197,16 @@ class _Syntax:
       result = self.nonterm_to_rules.get(key)
     return result
 
+  def rule_to_string(self, rule_id:int):
+    rule = self.get_rule(rule_id)
+    if rule is None:
+      return ""
+    result = f"{rule.le} ::="
+    for symbol in rule.re:
+      result += " "
+      result += symbol
+    return result
+
 class Syntax(_Syntax):
   def __init__(self, rule):
     self.rules:tuple[Rule]

@@ -1,5 +1,6 @@
 from .Data import InputToken
 from collections import deque
+from .Syntax import Syntax
 
 class ParserParseError(Exception):
   def __init__(self, message:str, tokens:list, row:int, start_index:int):
@@ -46,3 +47,26 @@ class TokenizerTokneizeError(Exception):
         case _:
           result_string += token
     return f"\n{self.args[0]}\n[{self.row_count}]{"".join(self.tokens[start:self.error_index])} -> {"".join(self.tokens[self.error_index:end])}"
+
+class ReduceReduceConflict(Exception):
+  def __init__(self, message:str, table1:dict, table2:dict, la, state:int, syntax:Syntax):
+    self.table1 = table1
+    self.table2 = table2
+    self.state = state
+    self.la = la
+    self.syntax = syntax
+    super().__init__(message)
+
+  def __str__(self):
+    table1_string = self.syntax.rule_to_string(self.table1.get("value"))
+    table2_string = self.syntax.rule_to_string(self.table2.get("value"))
+    return f'''\n{self.args[0]}
+Reduce/Reduce Conflict
+
+State: {self.state}
+Lookahead: {self.la}
+
+Rule
+  1, {table1_string}
+  2, {table2_string}
+'''

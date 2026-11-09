@@ -115,7 +115,7 @@ def _parse(tokenizer_path:str, bnf_path:str, file_path:str):
   result = lalr1.parse(input)
   return result
 
-def parse(tokenizer_path:str, bnf_path:str, file_path:str) -> SyntaxTreeNode:
+def parse(tokenizer_path:str, bnf_path:str, file_path:str, conflict_print = False) -> SyntaxTreeNode:
   syntax = _parse(bnf_tokenizer_path, syntax_rule_bnf_path, bnf_path)
   syntax = SyntaxAstGenerator.sytanx_ast_generator(syntax)
   syntax = Syntax(syntax)
@@ -126,4 +126,7 @@ def parse(tokenizer_path:str, bnf_path:str, file_path:str) -> SyntaxTreeNode:
   input = Tokenizer(tokenizer_path, bnf_path, file_path, syntax.symbols - syntax.nonterm_symbols)
   input.append(EOF)
   result = lalr1.parse(input)
+  if conflict_print:
+    for conflict_data in lalr1.conflict_data:
+      conflict_data.show(syntax)
   return result
