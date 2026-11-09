@@ -149,10 +149,9 @@ class LALR1:
             reduce_table.get("value"), 
             reduce_precedence, 
             True, 
-            add_table.get("action"), 
+            "nonassoc", 
             reason
           )
-          self.conflict_data.append(conflict_data)
           add_table = {"action":Nonassoc, "value":conflict_data}
     self.conflict_data.append(
       ConflictData(
