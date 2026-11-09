@@ -139,7 +139,7 @@ class LALR1:
       action_data = self.table.get(stack[-1]).get(input_token)
       if action_data is None:
         raise ParserParseError(
-          "解析エラーが発生しました",
+          "構文解析でエラーが発生しました",
           copy.deepcopy(input),
           row_count,
           row_start
