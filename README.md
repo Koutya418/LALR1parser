@@ -1,5 +1,5 @@
 # LALR1parser
-[![LALR1parser CI](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml/badge.svg)](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml)
+[![LALR1parser CI](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml/badge.svg)](https://github.com/Koutya418/LALR1parser/actions/workflows/test.yml)  
 LR(0)からの先読み記号の伝搬によるアルゴリズムで実装したLALR1パーサージェネレーターです。  
 
 ## 背景
