@@ -141,7 +141,7 @@ class LALR1:
           pass
         case "nonassoc":
           reason = "nonassocが指定されている"
-          conflict_data = ConflictData(
+          add_conflict_data = ConflictData(
             state, 
             symbol, 
             shift_table.get("value"), 
@@ -152,7 +152,10 @@ class LALR1:
             "nonassoc", 
             reason
           )
-          add_table = {"action":Nonassoc, "value":conflict_data}
+          add_table = {"action":Nonassoc, "value":add_conflict_data}
+    select_action = add_table.get("action")
+    if select_action == Nonassoc:
+      select_action = "nonassoc"
     self.conflict_data.append(
       ConflictData(
           state, 
@@ -161,8 +164,8 @@ class LALR1:
           shift_precedence, 
           reduce_table.get("value"), 
           reduce_precedence, 
-          True, 
-          add_table.get("action"), 
+          True,
+          select_action, 
           reason
         )
       )
