@@ -128,7 +128,7 @@ class LALR1:
             add_table.get("action"), 
             reason
           )
-        add_conflict_data.show()
+        add_conflict_data.show(self.syntax)
         self.conflict_data.append(add_conflict_data)
         return
       associativity = associativity.get("associativity")
