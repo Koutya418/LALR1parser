@@ -1,0 +1,6 @@
+
+S' ::= <expression>;
+
+<expression> ::= <expression> "+" <expression>
+            | <expression> "*" <expression>
+            | int;

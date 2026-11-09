@@ -1,5 +1,0 @@
-
-S' ::= <expression>;
-
-<expression> ::= int
-               | "<eps>";

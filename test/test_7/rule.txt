@@ -1,7 +1,0 @@
-
-S' ::= <expression>;
-
-<expression> ::= int <expression_tail>;
-
-<expression_tail> ::= "+" int <expression_tail>
-                    | "<eps>";

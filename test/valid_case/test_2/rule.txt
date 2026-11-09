@@ -1,0 +1,13 @@
+
+S' ::= <expression>;
+
+<expression> ::= <expression> "+" <expression>
+            | <expression> "-" <expression>
+            | <expression> "*" <expression>
+            | "-" <expression> %prec UMINUS
+            | "(" <expression> ")"
+            | int;
+
+%left "+" "-"
+%left "*"
+%right UMINUS
