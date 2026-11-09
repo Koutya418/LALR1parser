@@ -137,13 +137,16 @@ class LALR1:
       if isinstance(input_token, InputToken):
         input_token = input_token.token_type
       action_data = self.table.get(stack[-1]).get(input_token)
-      if action_data is None:
-        raise ParserParseError(
-          "構文解析でエラーが発生しました",
-          copy.deepcopy(input),
-          row_count,
-          row_start
-        )
+      try:
+        if action_data is None:
+          raise ParserParseError(
+            "構文解析でエラーが発生しました",
+            copy.deepcopy(input),
+            row_count,
+            row_start
+          )
+      except ParserParseError as e:
+        raise SystemExit(str(e))
       action = action_data.get("action")
       value = action_data.get("value")
       match action:

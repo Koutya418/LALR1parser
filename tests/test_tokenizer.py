@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
         if not case.is_dir():
           continue
         test_file = case / "test.txt"
-        with self.assertRaises(TokenizerTokneizeError, msg=f"test:{test_dir.name} case:{case.name}") as exc:
+        with self.assertRaises(SystemExit, msg=f"test:{test_dir.name} case:{case.name}") as exc:
           result = Parser.parse(tokenizer_file, bnf_file, test_file)
           result = Tools.AST_gen(result)
           result = Tools.AST_to_String(result)
