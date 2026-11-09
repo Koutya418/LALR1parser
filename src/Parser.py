@@ -18,7 +18,7 @@ bnf_file_path = base_dir / "bnf.txt"
 file = base_dir / "test.txt"
 tokenizer_tokenizer_file_path = base_dir / "json" / "Tokenizer_NFA.json"
 
-def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = None):
+def Tokenizer(tokenizer_path:Path, bnf_path:Path, file:Path, terms:set = None):
   result_pattern:list[str] = []
   with tokenizer_path.open(encoding='utf-8', mode='r') as f:
     input_str = f.read()
@@ -45,25 +45,32 @@ def Tokenizer(tokenizer_path:Path, bnf_path:Path, file_path:Path, terms:set = No
 
   eol_rule = ""
   result_strings = []
-  with file_path.open(encoding='utf-8', mode='r') as f:
-    input_str = f.read()
-    toknizer_pattern = ""
-    ignore_chars:list = []
-    for pattern in result_pattern:
-      rule_name = pattern[0]
-      rule_chars = pattern[1].split("|")
-      for i, char in enumerate(rule_chars):
-        if char == "\\n":
-          rule_chars[i] = "\n"
-          eol_rule = rule_name
-      if rule_name == "skip":
-        ignore_chars = rule_chars
-      rule_chars = "|".join(rule_chars)
-      toknizer_pattern += rule_chars
-      toknizer_pattern += "|"
-    toknizer_pattern = toknizer_pattern[:-1]
-    tokens = Lexer.Tokenizer(toknizer_pattern, input_str)
-    result_strings = tokens
+  input_str = ""
+  match file:
+    case Path():
+      with file.open(encoding='utf-8', mode='r') as f:
+        input_str = f.read()
+    case str():
+      input_str = file
+    case _:
+      raise ValueError("Pathかstrで入力してください")
+  toknizer_pattern = ""
+  ignore_chars:list = []
+  for pattern in result_pattern:
+    rule_name = pattern[0]
+    rule_chars = pattern[1].split("|")
+    for i, char in enumerate(rule_chars):
+      if char == "\\n":
+        rule_chars[i] = "\n"
+        eol_rule = rule_name
+    if rule_name == "skip":
+      ignore_chars = rule_chars
+    rule_chars = "|".join(rule_chars)
+    toknizer_pattern += rule_chars
+    toknizer_pattern += "|"
+  toknizer_pattern = toknizer_pattern[:-1]
+  tokens = Lexer.Tokenizer(toknizer_pattern, input_str)
+  result_strings = tokens
 
   tokens = []
   NFAs:list[tuple[str, NFA]] = []

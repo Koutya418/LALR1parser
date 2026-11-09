@@ -11,8 +11,7 @@ if __name__ == "__main__":
   file_path = clac_path / "test.txt"
 
   input_str = input("数式を入力してください: ")
-  file_path.write_text(input_str, encoding="utf-8")
-  result = Parser.parse(tokenizer_path, rule_path, file_path)
+  result = Parser.parse(tokenizer_path, rule_path, input_str)
   result = AST_gen(result)
   result = AST_to_String(result)
   print(result)
