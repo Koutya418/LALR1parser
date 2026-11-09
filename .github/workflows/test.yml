@@ -1,4 +1,4 @@
-name: Parser Tests
+name: LALR1parser CI
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
 
       # unittestを実行
       - name: Run tests
-        run: python -m unittest -v parse_test
+        run: python -m unittest discover -s tests -v

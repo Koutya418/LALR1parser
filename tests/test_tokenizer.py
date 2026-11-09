@@ -7,7 +7,7 @@ from pathlib import Path
 
 class Test(unittest.TestCase):
   def test_valid_cases(self):
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parents[1]
     test_dir = base_dir / "test" / "valid_case"
     for item in test_dir.iterdir():
       if not item.is_dir():
@@ -32,9 +32,9 @@ class Test(unittest.TestCase):
             answer = None
           self.assertEqual(answer, result, msg=f"test:{test_dir.name} case:{case.name}")
 
-  def test_parse_error_cases(self):
-    base_dir = Path(__file__).resolve().parent
-    test_dir = base_dir / "test" / "parse_error"
+  def test_tokenizer_error_cases(self):
+    base_dir = Path(__file__).resolve().parents[1]
+    test_dir = base_dir / "test" / "tokenizer_error"
     for item in test_dir.iterdir():
       if not item.is_dir():
         continue
@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
         if not case.is_dir():
           continue
         test_file = case / "test.txt"
-        with self.assertRaises(ParserParseError, msg=f"test:{test_dir.name} case:{case.name}") as exc:
+        with self.assertRaises(TokenizerTokneizeError, msg=f"test:{test_dir.name} case:{case.name}") as exc:
           result = Parser.parse(tokenizer_file, bnf_file, test_file)
           result = Tools.AST_gen(result)
           result = Tools.AST_to_String(result)
