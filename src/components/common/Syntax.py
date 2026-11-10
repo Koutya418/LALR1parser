@@ -234,6 +234,7 @@ class Syntax(_Syntax):
     result_nonterm_to_rules:dict[str, set] = {}
     result_term_precedences:dict[str, dict[str, int|str]] = {}
     precedence = 0
+    definition_precedences = set()
     if not isinstance(node, SyntaxNode):
       raise ValueError
     for rules in node.rules:
@@ -268,6 +269,7 @@ class Syntax(_Syntax):
               result_nonterm_to_rules[le] = set()
             result_nonterm_to_rules[le].add(rule_id)
             result_rules.append(Rule(rule_id, le, tuple(re), rule.prec))
+            definition_precedences.add(rule.prec)
     terms = result_symbols - result_nonterm_symbols
     for rule in result_rules:
       if rule.prec is not None:
@@ -279,4 +281,9 @@ class Syntax(_Syntax):
         if symbol in terms:
           rule.prec = result_term_precedences.get(symbol)
           break
+    for precedence in definition_precedences:
+      if precedence is None:
+        continue
+      if result_term_precedences.get(precedence) is None:
+        raise SyntaxError(f"{precedence}は優先順位が定義されていません")
     return result_rules, result_symbols, result_nonterm_symbols, result_nonterm_to_rules, result_term_precedences
