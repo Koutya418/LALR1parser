@@ -281,9 +281,9 @@ class Syntax(_Syntax):
         if symbol in terms:
           rule.prec = result_term_precedences.get(symbol)
           break
-    for precedence in definition_precedences:
-      if precedence is None:
+    for prec_name in definition_precedences:
+      if prec_name is None:
         continue
-      if result_term_precedences.get(precedence) is None:
-        raise SyntaxError(f"{precedence}は優先順位が定義されていません")
+      if result_term_precedences.get(prec_name) is None:
+        raise SyntaxError(f"{prec_name}は優先順位が定義されていません")
     return result_rules, result_symbols, result_nonterm_symbols, result_nonterm_to_rules, result_term_precedences
