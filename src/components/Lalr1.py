@@ -83,6 +83,7 @@ class LALR1:
 
   def conflict_solver(self, state, symbol, reduce_table:dict, shift_table:dict):
     reason = ""
+    resolvd = False
     if not isinstance(self.syntax, Syntax):
       return
     if reduce_table == shift_table:
@@ -108,9 +109,11 @@ class LALR1:
     if shift_precedence is None or reduce_precedence is None:
       pass
     elif shift_precedence > reduce_precedence:
+      resolvd = True
       reason = "shiftの優先順位が高い"
       pass
     elif shift_precedence < reduce_precedence:
+      resolvd = True
       reason = "reduceの優先順位が高い"
       add_table = reduce_table
     elif shift_precedence == reduce_precedence:
@@ -134,12 +137,15 @@ class LALR1:
       associativity = associativity.get("associativity")
       match associativity:
         case "left":
+          resolvd = True
           reason = "左結合が指定されている"
           add_table = reduce_table
         case "right":
           reason = "右結合が指定されている"
+          resolvd = True
           pass
         case "nonassoc":
+          resolvd = True
           reason = "nonassocが指定されている"
           add_conflict_data = ConflictData(
             state, 
@@ -148,7 +154,7 @@ class LALR1:
             shift_precedence, 
             reduce_table.get("value"), 
             reduce_precedence, 
-            True, 
+            resolvd, 
             "nonassoc", 
             reason
           )
@@ -164,7 +170,7 @@ class LALR1:
           shift_precedence, 
           reduce_table.get("value"), 
           reduce_precedence, 
-          True,
+          resolvd,
           select_action, 
           reason
         )
