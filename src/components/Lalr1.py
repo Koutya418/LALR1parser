@@ -107,11 +107,10 @@ class LALR1:
       shift_precedence = shift_precedence.get("precedence")
     add_table = shift_table
     if shift_precedence is None or reduce_precedence is None:
-      pass
+      reason = "優先順位が未指定のためshiftを選択"
     elif shift_precedence > reduce_precedence:
       resolvd = True
       reason = "shiftの優先順位が高い"
-      pass
     elif shift_precedence < reduce_precedence:
       resolvd = True
       reason = "reduceの優先順位が高い"
@@ -143,7 +142,6 @@ class LALR1:
         case "right":
           reason = "右結合が指定されている"
           resolvd = True
-          pass
         case "nonassoc":
           resolvd = True
           reason = "nonassocが指定されている"
