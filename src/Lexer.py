@@ -78,9 +78,8 @@ def Tokenizer(pattern:str|Path, input_str:str):
   count = 0
   row_count = 1
   while len(input_deque) > 0:
-    input_chars = "".join(input_deque)
-    ret = nfa.reg(input_chars)
-    result.append("".join(ret.accepts))
+    ret = nfa.reg(input_deque)
+    result.append(ret.accepts)
     consume_flag = True
     for sym in ret.accepts:
       if sym == "\n":

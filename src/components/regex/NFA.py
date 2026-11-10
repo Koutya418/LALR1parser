@@ -18,7 +18,7 @@ class NFA_ret:
 
 @dataclass
 class Regex_ret:
-  accepts: list
+  accepts: str
   count: int
   return_value: int
 
@@ -198,9 +198,11 @@ class NFA:
     return_value = -1
     count = 0
     result = [0]
+    result_string = ""
     for _, input_sym in enumerate(input): #C
       consume_flag = False
       next_states = set()
+      result_string += input_sym
       worklist = deque(states)
       while len(worklist) > 0: #B
         state = worklist.popleft()
@@ -252,10 +254,10 @@ class NFA:
         for state_id in next_states:
           if self.table[state_id].mode is None:
             continue
-          return Regex_ret(input[:count], count, return_value)
+          return Regex_ret(result_string[:count], count, return_value)
       states = next_states
       if not states:
         break
     if max(result) >= len(input) and self.end_id in states:
       return_value = 0
-    return Regex_ret(input[:max(result)], max(result), return_value)
+    return Regex_ret(result_string[:max(result)], max(result), return_value)
