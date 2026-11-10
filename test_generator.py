@@ -9,6 +9,25 @@ operator = "+|-|\*|\/|^|\(|\)"
 skip = "\n| "
 '''
 
+# 比較演算子 "<" ">" を含むトークナイザー
+TOKENIZER_CMP = r'''int = "/d/d*"
+operator = "<|>|+|\*|\(|\)"
+skip = "\n| "
+'''
+
+# %nonassoc の衝突で発生する構文解析エラーの期待値を組み立てる
+def nonassoc_error(row, line, state, la, shift_state, rule):
+    return (
+        f"\n構文解析でエラーが発生しました\n[{row}]{line} <-\n\n"
+        f"stateid: {state}\nlookahead: {la}\n\n"
+        f"Shift:\n  next state: {shift_state}\n  precedence: 0\n\n"
+        f"Reduce:\n  {rule}\n  precedence: 0\n\n"
+        f"Resolution:\n  resolved: True\n  select action: nonassoc\n"
+        f"  reason: nonassocが指定されている\n"
+    )
+
+LT = "<expression> ::= <expression> < <expression>"
+GT = "<expression> ::= <expression> > <expression>"
 
 tests: dict[str, list[dict[str, str|list[dict]]]] = {
    "valid_case":[
@@ -357,9 +376,80 @@ S' ::= <expression>;
                     "answer": "\n構文解析でエラーが発生しました\n[2] <-"
                 },
             ]
+        },
+
+        #13 .%nonassoc: 非結合演算子の連続はエラーになる
+        {
+            "tokenizer": TOKENIZER_CMP,
+            "rule": r'''
+S' ::= <expression>;
+
+<expression> ::= <expression> "<" <expression>
+            | "(" <expression> ")"
+            | int;
+
+%nonassoc "<"
+''',
+            "cases": [
+                {"test": "1<2<3", "answer": nonassoc_error(1, "1<2<3", 6, "<", 4, LT)},
+                {"test": "(1<2)<3<4", "answer": nonassoc_error(1, "(1<2)<3<4", 6, "<", 4, LT)},
+
+                # 2行目で連続する場合は行番号も報告される
+                {"test": "1<2\n<3", "answer": nonassoc_error(2, "<3", 6, "<", 4, LT)},
+
+                # nonassoc の衝突ではない通常の構文エラーには衝突情報が付かない
+                {"test": "1<<2", "answer": "\n構文解析でエラーが発生しました\n[1]1<<2 <-"},
+                {"test": "1<", "answer": "\n構文解析でエラーが発生しました\n[1]1< <-"},
+            ]
+        },
+
+        #14 .%nonassoc: 優先順位の異なる演算子と組み合わせた場合のエラー
+        {
+            "tokenizer": TOKENIZER_CMP,
+            "rule": r'''
+S' ::= <expression>;
+
+<expression> ::= <expression> "<" <expression>
+            | <expression> "+" <expression>
+            | <expression> "*" <expression>
+            | "(" <expression> ")"
+            | int;
+
+%nonassoc "<"
+%left "+"
+%left "*"
+''',
+            "cases": [
+                # 高い優先順位の演算子を挟んでも、"<" が2回現れればエラー
+                {"test": "1<2+3<4", "answer": nonassoc_error(1, "1<2+3<4", 9, "<", 5, LT)},
+                {"test": "1+2<3<4", "answer": nonassoc_error(1, "1+2<3<4", 9, "<", 5, LT)},
+                {"test": "1<2<3+4", "answer": nonassoc_error(1, "1<2<3+4", 9, "<", 5, LT)},
+            ]
+        },
+
+        #15 .%nonassoc: 同じ優先順位に指定した複数の演算子の組み合わせはエラーになる
+        {
+            "tokenizer": TOKENIZER_CMP,
+            "rule": r'''
+S' ::= <expression>;
+
+<expression> ::= <expression> "<" <expression>
+            | <expression> ">" <expression>
+            | "(" <expression> ")"
+            | int;
+
+%nonassoc "<" ">"
+''',
+            "cases": [
+                {"test": "1<2>3", "answer": nonassoc_error(1, "1<2>3", 7, ">", 5, LT)},
+                {"test": "1>2<3", "answer": nonassoc_error(1, "1>2<3", 8, "<", 4, GT)},
+                {"test": "1<2<3", "answer": nonassoc_error(1, "1<2<3", 7, "<", 4, LT)},
+                {"test": "1>2>3", "answer": nonassoc_error(1, "1>2>3", 8, ">", 5, GT)},
+            ]
         }
     ],
     "tokenizer_error":[
+        #16 .トークナイザ―の異常系
         {
             "tokenizer": 'digit = "/d"\n'
                         'operator = "+|-|\\*|\\/|^|\\(|\\)"\n'

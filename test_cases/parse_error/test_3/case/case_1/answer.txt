@@ -1,0 +1,19 @@
+
+構文解析でエラーが発生しました
+[1]1+2<3<4 <-
+
+stateid: 9
+lookahead: <
+
+Shift:
+  next state: 5
+  precedence: 0
+
+Reduce:
+  <expression> ::= <expression> < <expression>
+  precedence: 0
+
+Resolution:
+  resolved: True
+  select action: nonassoc
+  reason: nonassocが指定されている
